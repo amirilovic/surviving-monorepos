@@ -1,0 +1,30 @@
+{
+  "name": "@shop/logger",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./*": "./dist/*"
+  },
+  "scripts": {
+    "dev": "npm run build -- --emptyOutDir=false --watch",
+    "build": "vite build",
+    "test": "vitest",
+    "test:watch": "npm run test -- --watch",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@shop/tsconfig": "*",
+    "@shop/vite": "*",
+    "eslint": "^8.28.0",
+    "eslint-config-shop": "*",
+    "vitest": "^0.25.3"
+  },
+  "dependencies": {
+    "pino": "^8.7.0"
+  }
+}

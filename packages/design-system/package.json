@@ -1,0 +1,33 @@
+{
+  "name": "@shop/design-system",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./*": "./dist/*"
+  },
+  "scripts": {
+    "dev": "npm run build -- --emptyOutDir=false --watch",
+    "build": "vite build",
+    "test": "vitest",
+    "test:watch": "npm run test -- --watch",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@shop/tsconfig": "*",
+    "@shop/vite": "*",
+    "@types/react": "^18.0.25",
+    "eslint": "^8.28.0",
+    "eslint-config-shop": "*",
+    "sass": "^1.56.1",
+    "vite": "^3.2.4",
+    "vitest": "^0.25.3"
+  },
+  "dependencies": {
+    "react": "^18.2.0"
+  }
+}
