@@ -3,18 +3,20 @@
 - [Effective Monorepos](#effective-monorepos)
   - [What is a Monorepo?](#what-is-a-monorepo)
   - [Monorepos with Node.js](#monorepos-with-nodejs)
-    - [What is a npm workspace?](#what-is-a-npm-workspace)
-    - [What is Turborepo?](#what-is-turborepo)
-    - [Why Turborepo and not nx?](#why-turborepo-and-not-nx)
   - [Example](#example)
   - [Tools \& Frameworks](#tools--frameworks)
-  - [Workspace Structure](#workspace-structure)
+  - [NPM Workspace](#npm-workspace)
+    - [What is a npm workspace?](#what-is-a-npm-workspace)
   - [Package Structure](#package-structure)
   - [Configs](#configs)
   - [eslint](#eslint)
   - [tsconfig](#tsconfig)
   - [vite](#vite)
   - [Turborepo](#turborepo)
+    - [What is Turborepo?](#what-is-turborepo)
+    - [Turborepo Cache](#turborepo-cache)
+    - [Turborepo Remote Cache](#turborepo-remote-cache)
+    - [Why Turborepo and not nx?](#why-turborepo-and-not-nx)
 
 ## What is a Monorepo?
 
@@ -52,48 +54,6 @@ Historically Node.js had very poor support for structuring complex applications 
 - Until npm 7 there was no standard way in Node.js to define multiple packages in one repository. npm introduced support for workspaces on 13th of October 20.
 - Node.js doesn’t have internal build tool that understands dependencies between packages in one repo. Custom tools like lerna, nx, turborepo need to be used to run a task like build in correct order respecting all dependencies.
 
-### What is a npm workspace?
-
-> Workspaces is a generic term that refers to the set of features in the npm cli that provides support to **managing multiple packages** from your local file system from within a singular top-level, **root package**.
-
-[https://docs.npmjs.com/cli/v7/using-npm/workspaces](https://docs.npmjs.com/cli/v7/using-npm/workspaces)
-
-### What is Turborepo?
-
-> Turborepo is a high-performance build system for **JavaScript and TypeScript codebases**.
-
-[https://turbo.build/repo](https://turbo.build/repo)
-
-Features:
-
-- Understands your workspace and can execute task in correct order 👍
-- Can cache results of task executions - it doesn’t execute same task twice if no code has been changed 🥰
-- Understands git and can execute a task for only affected part of the codebase 😲
-- Supports remote task results caching - task gets executed once and everyone can reuse results locally 🤯
-
-### Why Turborepo and not nx?
-
-Currently nx is much more powerful tool than turborepo, here is my list of pros and cons.
-
-Pros
-
-- nx is around for many years and is developed by an amazing team.
-- It supports all features from Turborepo and much more.
-- It can be used for any language, not just Node.js.
-- Has very advanced build features like distributed task execution!
-- Has support for code templates.
-- Has very nice dashboards that show how much time it saved you:
-
-![Nx Remote Cache Dashboard](docs/assets/nx-dashboard.png)
-
-Cons
-
-- Much more complex to setup and understand. It is a very generic and powerful tool and because of that it is simply harder to get started with.
-- Wraps common tools in custom plugins with custom configuration forcing you to do setup your repo in a very different way. With Turborepo you setup everything as you usually would do and you just add it at the end in 5mins.
-- Remote cache option is a paid feature, with Turborepo it is free and you can easily self-host it.
-
-In general I would use nx if I had a really big repo, but on the other hand I don’t want to have a really big repo ever again 😉
-
 ## Example
 
 Lets build a dummy ecom website that has a frontend application and an api. We also need to have library of our design system components and we have some shared utilities like logger.
@@ -117,7 +77,13 @@ The purpose of the demo is to show how to implement common tasks in a Monorepo:
 - [prettier](https://prettier.io/) for code formatting rules.
 - [vitest](https://vitest.dev/) for unit testing.
 
-## Workspace Structure
+## NPM Workspace
+
+### What is a npm workspace?
+
+> Workspaces is a generic term that refers to the set of features in the npm cli that provides support to **managing multiple packages** from your local file system from within a singular top-level, **root package**.
+
+[https://docs.npmjs.com/cli/v7/using-npm/workspaces](https://docs.npmjs.com/cli/v7/using-npm/workspaces)
 
 Workspace consists of many npm packages. To create workspace with npm you need to follow these steps:
 
@@ -202,13 +168,13 @@ In `packages/logger`:
 This means that user of the package can import it like:
 
 ```js
-import * as logger from '@shop/logger'; // imports packages/logger/dist/index.js
+import * as logger from "@shop/logger"; // imports packages/logger/dist/index.js
 ```
 
 or to import styles for example:
 
 ```js
-import '@shop/design-system/style.css'; // imports packages/design-system/dist/style.css
+import "@shop/design-system/style.css"; // imports packages/design-system/dist/style.css
 ```
 
 ## Configs
@@ -271,9 +237,24 @@ In general any build tool could work, as long as you implement above requirement
 
 ## Turborepo
 
-Once we have all packages setup, we need a tool that will orchestrate execution of different tasks across many different packages with respect to dependencies between them. For example, lets say that we want to build `@shop/api` looking at dependencies in `package.json` we see that it depends on `@shop/logger`, so it needs to be built first. Turborepo solves exactly this problem. Lets add turborepo to our repo.
+### What is Turborepo?
 
-From repo root:
+> Turborepo is a high-performance build system for **JavaScript and TypeScript codebases**.
+
+[https://turbo.build/repo](https://turbo.build/repo)
+
+Features:
+
+- Understands your workspace and can execute task in correct order 👍
+- Can cache results of task executions - it doesn’t execute same task twice if no code has been changed 🥰
+- Understands git and can execute a task for only affected part of the codebase 😲
+- Supports remote task results caching - task gets executed once and everyone can reuse results locally 🤯
+
+To explain why we need turbo repo lets take an example. Lets say that we want to build `@shop/api`. Looking at dependencies in `package.json` we see that it depends on `@shop/logger`, so it needs to be built first, but if it has any dependencies those would have to be built first and so on... You never want to maintain this build configuration manually, turborepo solves this problem for you.
+
+Here is how we add turbo to our repo:
+
+From repo root run:
 
 ```bash
 $ npm install -D turbo
@@ -310,15 +291,105 @@ In our root `package.json` we define following commands using turborepo in `scri
 ```json
 {
   "test": "turbo run test",
-  "test:affected": "turbo run test --filter=...[origin/main]",
+  "test:affected": "turbo run test --filter=${BASE_COMMIT:-...[origin/main]}",
   "lint": "turbo run lint",
-  "lint:affected": "turbo run lint --filter=...[origin/main]",
+  "lint:affected": "turbo run lint --filter=${BASE_COMMIT:-...[origin/main]}",
   "lint:fix": "turbo run lint -- --fix",
   "build": "turbo run build",
+  "build:affected": "turbo run build --filter=${BASE_COMMIT:-...[origin/main]}",
   "dev": "turbo run dev --parallel"
 }
 ```
 
 As you can see from the above, turborepo has another great feature - running command for only affected part of our codebase! This means, if we change a file in `@shop/design-system`, when we run test command in our CI, **we want** to run tests only for `@shop/design-system` and `@shop/website` since it depends on design-system, but **we don't want** to run tests for `@shop/logger` and `@shop/api` since they are in no way affected by the changes we made. This can dramatically improve performance of our pipeline.
 
-For more info on turborepo visit https://turbo.build/repo.
+Now everything is setup and we can start using turborepo.
+
+Lets do a simple test. Make a change in `packages/logger/index.ts` and add a dummy comment:
+
+```ts
+import pino from "pino";
+
+const logLevel = process.env.LOG_LEVEL ?? "info";
+
+export const logger = pino({
+  level: logLevel,
+});
+
+// dummy test
+```
+
+Run `build:affected` command from the root of the repo:
+
+```bash
+$ npm run build:affected
+```
+
+In the output you should see that build was executed only for `@shop/logger` and `@shop/api` packages since no other package is affected by the change 😍
+
+### Turborepo Cache
+
+Turborepo caches command execution results, what this means is that if you run the same command without changing any source file, turborepo will just pull the result from cache.
+
+Lets test this. Run the build command from repo root:
+
+```bash
+$ npm run build
+```
+
+After the first run you should see build for all packages executed and results are shown in the output:
+
+```
+ Tasks:    4 successful, 4 total
+Cached:    0 cached, 4 total
+  Time:    10.567s
+```
+
+If you run the same command again, everything should be already cached and results are shown immediately:
+
+```
+ Tasks:    4 successful, 4 total
+Cached:    4 cached, 4 total
+  Time:    141ms >>> FULL TURBO
+```
+
+This is simply amazing 🥳
+
+By default turborepo stores it's cache at `node_modules/.cache/turbo`.
+
+If you want to execute commands with turbo, but bypass cache completely, just add `--force` flag.
+
+```bash
+$ npm run build -- --force
+```
+
+### Turborepo Remote Cache
+
+Turborepo has a killer feature to use **remote cache**. What that means is that turborepo can store results of execution on a remote server and then any other developer running turborepo for the first time on their machine will get results from the remote server without really executing underlying command 🤯 This also means that when you checkout `main` branch and run any command, you would get instant results as there CI already ran all the steps for you ❤️.
+
+Vercel, company that sponsors turborepo development, offers free remote cache storage. To set it up, follow instructions here https://turbo.build/repo/docs/core-concepts/remote-caching#vercel.
+
+There are many open source implementations of turborepo remote cache, so you can self-host remote cache server. One that I used: https://github.com/Tapico/tapico-turborepo-remote-cache.
+
+### Why Turborepo and not nx?
+
+Currently nx is much more powerful tool than turborepo, here is my list of pros and cons.
+
+Pros
+
+- nx is around for many years and is developed by an amazing team.
+- It supports all features from Turborepo and much more.
+- It can be used for any language, not just Node.js.
+- Has very advanced build features like distributed task execution!
+- Has support for code templates.
+- Has very nice dashboards that show how much time it saved you:
+
+![Nx Remote Cache Dashboard](docs/assets/nx-dashboard.png)
+
+Cons
+
+- Much more complex to setup and understand. It is a very generic and powerful tool and because of that it is simply harder to get started with.
+- Wraps common tools in custom plugins with custom configuration forcing you to do setup your repo in a very different way. With Turborepo you setup everything as you usually would do and you just add it at the end in 5mins.
+- Remote cache option is a paid feature, with Turborepo it is free and you can easily self-host it.
+
+In general I would use nx if I had a really big repo, but on the other hand I don’t want to have a really big repo ever again 😉

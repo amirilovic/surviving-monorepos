@@ -5,3 +5,5 @@ const logLevel = process.env.LOG_LEVEL ?? "info";
 export const logger = pino({
   level: logLevel,
 });
+
+// dummy test
