@@ -14,7 +14,7 @@ app.get("/_manage/info", (_req: express.Request, res: express.Response) => {
 });
 
 app.use((_req: express.Request, res: express.Response) => {
-  res.status(404).send({ message: "NotFound!!!" });
+  res.status(404).send({ message: "NotFound" });
 });
 
 app.use(
