@@ -1,4 +1,4 @@
-const { defineConfig } = require('vitest/config');
+const { defineConfig } = require('vite');
 const { onSuccess } = require('./vite-on-success-plugin');
 const react = require('@vitejs/plugin-react')
 const { checker } = require('vite-plugin-checker')
@@ -18,5 +18,5 @@ module.exports = defineConfig({
             fileName: 'index'
         }
     },
-    plugins: [  checker({ typescript: true }), react(), onSuccess()]
+    plugins: [checker({ typescript: true }), react(), onSuccess()]
 });

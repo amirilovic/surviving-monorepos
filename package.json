@@ -11,12 +11,9 @@
   "main": "index.js",
   "scripts": {
     "test": "turbo run test",
-    "test:affected": "turbo run test --filter=${BASE_COMMIT:-...[origin/main]}",
     "lint": "turbo run lint",
-    "lint:affected": "turbo run lint --filter=${BASE_COMMIT:-...[origin/main]}",
     "lint:fix": "turbo run lint -- --fix",
     "build": "turbo run build",
-    "build:affected": "turbo run build --filter=${BASE_COMMIT:-...[origin/main]}",
     "dev": "turbo run dev --parallel"
   },
   "repository": {
@@ -30,12 +27,6 @@
     "url": "https://github.com/amirilovic/effective-monorepos/issues"
   },
   "homepage": "https://github.com/amirilovic/effective-monorepos#readme",
-  "devDependencies": {
-    "@shop/vite": "^0.0.0",
-    "debug": "^4.3.4",
-    "execa": "^6.1.0",
-    "tree-kill": "^1.2.2"
-  },
   "dependencies": {
     "turbo": "^1.6.3"
   }
