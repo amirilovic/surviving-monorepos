@@ -1,5 +1,21 @@
 # Effective Monorepos
 
+- [Effective Monorepos](#effective-monorepos)
+  - [What is a Monorepo?](#what-is-a-monorepo)
+  - [Monorepos with Node.js](#monorepos-with-nodejs)
+    - [What is a npm workspace?](#what-is-a-npm-workspace)
+    - [What is Turborepo?](#what-is-turborepo)
+    - [Why Turborepo and not nx?](#why-turborepo-and-not-nx)
+  - [Example](#example)
+  - [Tools \& Frameworks](#tools--frameworks)
+  - [Workspace Structure](#workspace-structure)
+  - [Package Structure](#package-structure)
+  - [Configs](#configs)
+  - [eslint](#eslint)
+  - [tsconfig](#tsconfig)
+  - [vite](#vite)
+  - [Turborepo](#turborepo)
+
 ## What is a Monorepo?
 
 > In version-control systems, a monorepo is a software-development strategy in which the code for a **number of projects** is stored in the **same repository**.

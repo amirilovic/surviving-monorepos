@@ -21,7 +21,6 @@
     "@shop/vite": "*",
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.14",
-    "@types/helmet": "^4.0.0",
     "@types/supertest": "^2.0.12",
     "eslint": "^8.28.0",
     "eslint-config-shop": "*",
