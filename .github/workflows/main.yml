@@ -30,6 +30,10 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
+      - name: Set BASE_COMMIT
+        if: github.ref == 'main'
+        run: export BASE_COMMIT=[HEAD^1]
+      - run: 'echo "BASE_COMMIT: $BASE_COMMIT"'
       - run: npm install
       - run: npm run build:affected
       - run: npm run lint:affected
