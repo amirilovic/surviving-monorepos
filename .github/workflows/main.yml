@@ -79,6 +79,6 @@ jobs:
           docker build  \
             -f apps/api/Dockerfile \
             -t ghcr.io/amirilovic/effective-monorepos-api:latest \
-            --cache-from=ghcr.io/amirilovic/effective-monorepos-api:latest
+            --cache-from=ghcr.io/amirilovic/effective-monorepos-api:latest \
             .
           docker push ghcr.io/amirilovic/effective-monorepos-api:latest
