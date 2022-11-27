@@ -16,6 +16,7 @@
     "lint:affected": "turbo run lint --filter=...[origin/main]",
     "lint:fix": "turbo run lint -- --fix",
     "build": "turbo run build",
+    "build:affected": "turbo run build --filter=...[origin/main]",
     "dev": "turbo run dev --parallel"
   },
   "repository": {

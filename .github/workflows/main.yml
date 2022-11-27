@@ -31,6 +31,6 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - run: npm install
-      - run: npm run build
+      - run: npm run build:affected
       - run: npm run lint:affected
       - run: npm run test:affected
