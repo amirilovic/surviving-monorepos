@@ -32,7 +32,7 @@ jobs:
             ${{ runner.os }}-
       - name: Set BASE_COMMIT
         if: github.ref_name == 'main'
-        run: export BASE_COMMIT=[HEAD^1]
+        run: echo "BASE_COMMIT=[HEAD^1]" >> $GITHUB_ENV
       - run: 'echo "BASE_COMMIT: $BASE_COMMIT"'
       - run: npm install
       - run: npm run build:affected
