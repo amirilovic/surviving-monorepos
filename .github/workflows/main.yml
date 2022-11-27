@@ -30,6 +30,9 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
+        # Setting BASE_COMMIT to: 
+        #  - on "main" run only for packages which changed since last commit
+        #  - on other branches run for all packages which changed compared to current origin/master (default option in package.json)
       - name: Set BASE_COMMIT
         if: github.ref_name == 'main'
         run: echo "BASE_COMMIT=[HEAD^1]" >> $GITHUB_ENV
