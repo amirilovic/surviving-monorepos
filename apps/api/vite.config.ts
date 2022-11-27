@@ -1,3 +1,3 @@
-import config from '@shop/vite';
+import config from "@shop/vite";
 
 export default config;

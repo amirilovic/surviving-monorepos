@@ -1,12 +1,12 @@
 {
-  "name": "website",
+  "name": "@shop/website",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@types/node": "18.11.9",

@@ -1,8 +1,8 @@
-import styles from './button.module.scss';
+import styles from "./button.module.scss";
 
 export type ButtonProps = {
   title: string;
-  variant: 'primary' | 'secondary';
+  variant: "primary" | "secondary";
   onClick: () => void;
 };
 
