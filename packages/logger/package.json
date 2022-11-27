@@ -21,7 +21,7 @@
     "@shop/tsconfig": "*",
     "@shop/vite": "*",
     "eslint": "^8.28.0",
-    "eslint-config-shop": "*",
+    "eslint-config-custom": "*",
     "vitest": "^0.25.3"
   },
   "dependencies": {

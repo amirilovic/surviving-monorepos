@@ -30,7 +30,7 @@
     "url": "https://github.com/amirilovic/effective-monorepos/issues"
   },
   "homepage": "https://github.com/amirilovic/effective-monorepos#readme",
-  "dependencies": {
+  "devDependencies": {
     "turbo": "^1.6.3"
   }
 }
