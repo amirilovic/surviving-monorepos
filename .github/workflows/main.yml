@@ -76,5 +76,5 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build the api docker image
         run: |
-          docker build -f apps/api/Dockerfile . -t ghcr.io/amiriliovic/effective-monorepos/api:latest
-          docker push ghcr.io/amirilovic/effective-monorepos/api:latest
+          docker build -f apps/api/Dockerfile . -t ghcr.io/amirilovic/effective-monorepos-api:latest
+          docker push ghcr.io/amirilovic/effective-monorepos-api:latest
