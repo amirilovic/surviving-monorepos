@@ -115,7 +115,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build the api docker image
+      - name: Build the website docker image
         run: |
           docker build  \
             -f apps/api/Dockerfile \
