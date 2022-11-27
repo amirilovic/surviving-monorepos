@@ -11,9 +11,12 @@
   "main": "index.js",
   "scripts": {
     "test": "turbo run test",
+    "test:affected": "turbo run test --filter=${BASE_COMMIT:-...[origin/main]}",
     "lint": "turbo run lint",
+    "lint:affected": "turbo run lint --filter=${BASE_COMMIT:-...[origin/main]}",
     "lint:fix": "turbo run lint -- --fix",
     "build": "turbo run build",
+    "build:affected": "turbo run build --filter=${BASE_COMMIT:-...[origin/main]}",
     "dev": "turbo run dev --parallel"
   },
   "repository": {
