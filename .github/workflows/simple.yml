@@ -56,6 +56,7 @@ jobs:
             --cache-from=ghcr.io/amirilovic/effective-monorepos-api:latest \
             .
           docker push ghcr.io/amirilovic/effective-monorepos-api:latest
+      - run: rm -rf ./out
       - run: npx turbo prune --scope=@shop/website --docker
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
@@ -71,4 +72,3 @@ jobs:
             --cache-from=ghcr.io/amirilovic/effective-monorepos-website:latest \
             .
           docker push ghcr.io/amirilovic/effective-monorepos-website:latest
-  
