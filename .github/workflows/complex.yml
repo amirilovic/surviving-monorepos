@@ -1,0 +1,125 @@
+name: Complex
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18.12.1"
+          cache: "npm"
+      - name: Cache node modules
+        id: cache-nodemodules
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-node-modules
+        with:
+          # caching node_modules
+          path: node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+        # Setting BASE_COMMIT to:
+        #  - on "main" run only for packages which changed since last commit
+        #  - on other branches run for all packages which changed compared to current origin/master (default option in package.json)
+      - name: Set BASE_COMMIT
+        if: github.ref_name == 'main'
+        run: echo "BASE_COMMIT=[HEAD^1]" >> $GITHUB_ENV
+      - run: 'echo "BASE_COMMIT: $BASE_COMMIT"'
+      - run: npm install
+      - run: npm run build:affected
+      - run: npm run lint:affected
+      - run: npm run test:affected
+  publish-api:
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18.12.1"
+          cache: "npm"
+      - name: Cache node modules
+        id: cache-nodemodules
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-node-modules
+        with:
+          # caching node_modules
+          path: node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - run: npm install
+      - run: npx turbo build --filter=@shop/api
+      - run: npx turbo prune --scope=@shop/api --docker
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build the api docker image
+        run: |
+          docker build  \
+            -f apps/api/Dockerfile \
+            -t ghcr.io/amirilovic/effective-monorepos-api:latest \
+            --cache-from=ghcr.io/amirilovic/effective-monorepos-api:latest \
+            .
+          docker push ghcr.io/amirilovic/effective-monorepos-api:latest
+  publish-website:
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18.12.1"
+          cache: "npm"
+      - name: Cache node modules
+        id: cache-nodemodules
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-node-modules
+        with:
+          # caching node_modules
+          path: node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - run: npm install
+      - run: npx turbo build --filter=@shop/website
+      - run: npx turbo prune --scope=@shop/website --docker
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build the website docker image
+        run: |
+          docker build  \
+            -f apps/api/Dockerfile \
+            -t ghcr.io/amirilovic/effective-monorepos-website:latest \
+            --cache-from=ghcr.io/amirilovic/effective-monorepos-website:latest \
+            .
+          docker push ghcr.io/amirilovic/effective-monorepos-website:latest
