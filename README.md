@@ -17,6 +17,8 @@
     - [Turborepo Cache](#turborepo-cache)
     - [Turborepo Remote Cache](#turborepo-remote-cache)
     - [Why Turborepo and not nx?](#why-turborepo-and-not-nx)
+  - [Dockerfile](#dockerfile)
+  - [CI Pipeline with Github actions](#ci-pipeline-with-github-actions)
 
 ## What is a Monorepo?
 
@@ -64,9 +66,9 @@ The purpose of the demo is to show how to implement common tasks in a Monorepo:
 - [x] Running lint
 - [x] Running tests
 - [x] Sharing configuration files for different tools
-- [ ] Building docker images
-- [ ] Pipeline
-  - [ ] `test` and `lint` only affected packages
+- [x] Building docker images
+- [x] Pipeline
+  - [x] `build`, `test` and `lint` only affected packages
 
 ## Tools & Frameworks
 
@@ -393,3 +395,83 @@ Cons
 - Remote cache option is a paid feature, with Turborepo it is free and you can easily self-host it.
 
 In general I would use nx if I had a really big repo, but on the other hand I don’t want to have a really big repo ever again 😉
+
+## Dockerfile
+
+We create `Dockerfile` for each deployable application, in our example we have `api` and `website` apps. We want our docker images to contain only necessary files run one specific app - we don't want to put whole node_modules in every docker image as this is going to increase image sizes significantly.
+
+Before building a docker image with only necessary files we need to:
+
+- Build only packages which our application depends on.
+- Somehow "select" part of our workspace which an application depends on and install dependencies only for those packages.
+
+Of course, Turborepo can does exactly these tasks.
+
+For example, to build only `api`, with turborepo it is enough to run from root of the repo:
+
+```bash
+$ npx turbo build --filter=@shop/api
+```
+
+This will make sure all required dependencies are build.
+
+To "select" part of our workspace, with turborepo we use `prune` command:
+
+```bash
+$ npx turbo prune --scope=@shop/api --docker
+```
+
+This will copy necessary part of our repo to `out` directory. And we will use that out directory in our Dockerfile to build the image. More about `prune` command [here](https://turbo.build/repo/docs/handbook/deploying-with-docker).
+
+Dockerfile for the `api` looks like:
+
+```Dockerfile
+# RUN DOCKER BUILD FROM ROOT OF THE WORKSPACE!!!
+FROM node:18.12.1-buster-slim AS builder
+
+ENV UV_THREADPOOL_SIZE 64
+ENV NODE_ENV=production
+
+ARG COMMIT_ID
+
+WORKDIR /app
+
+# First copy package.json files and package-lock.json
+COPY ./out/json .
+COPY ./out/package-lock.json ./package-lock.json
+
+# Run npm install
+RUN npm ci --omit=dev
+
+# Copy the rest of the files
+COPY ./out/full .
+
+USER node
+
+WORKDIR /app/apps/api
+
+EXPOSE 3000
+
+ENV PORT=3000
+
+CMD ["npm", "start"]
+```
+
+Tricky and important part to leverage docker cache is to first copy all package.json and package-lock.json file, run `npm install` then copy the rest of the files.
+
+Dockerfile for the `website` looks almost the same.
+
+## CI Pipeline with Github actions
+
+Github actions pipeline is implemented in `.github/workflows/main.yml`.
+
+Features of the pipeline:
+
+- Pipeline runs on push to any branch
+- Pipeline runs following steps: `code checkout`, `npm install`, `build:affected`, `lint:affected`, `test:affected`, after that it builds docker images for api and website and pushes to github image registry
+- Following optimizations are implemented:
+  - `node_modules` are cached and reused in all jobs. This makes `npm install` really fast.
+  - Using turborepo we are running tasks only for affected packages.
+  - Turborepo remote cache is setup, so build agents can use and create entries in remote cache. This makes the whole pipeline very fast as most of the time command results are retrieved from cache.
+  - When building docker images we run build and install only for required packages using turborepo.
+  - When building docker images `--cache-from` flag is used to reuse build results from previous run.
