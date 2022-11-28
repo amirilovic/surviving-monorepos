@@ -19,6 +19,8 @@
     - [Why Turborepo and not nx?](#why-turborepo-and-not-nx)
   - [Dockerfile](#dockerfile)
   - [CI Pipeline with Github actions](#ci-pipeline-with-github-actions)
+  - [Simple Pipeline](#simple-pipeline)
+  - [Complex Pipeline](#complex-pipeline)
 
 ## What is a Monorepo?
 
@@ -463,15 +465,38 @@ Dockerfile for the `website` looks almost the same.
 
 ## CI Pipeline with Github actions
 
-Github actions pipeline is implemented in `.github/workflows/main.yml`.
+Two pipelines are implemented in this repository `simple` and `complex`.
 
-Features of the pipeline:
+Both pipelines do:
 
-- Pipeline runs on push to any branch
-- Pipeline runs following steps: `code checkout`, `npm install`, `build:affected`, `lint:affected`, `test:affected`, after that it builds docker images for api and website and pushes to github image registry
-- Following optimizations are implemented:
-  - `node_modules` are cached and reused in all jobs. This makes `npm install` really fast.
-  - Using turborepo we are running tasks only for affected packages.
-  - Turborepo remote cache is setup, so build agents can use and create entries in remote cache. This makes the whole pipeline very fast as most of the time command results are retrieved from cache.
-  - When building docker images we run build and install only for required packages using turborepo.
-  - When building docker images `--cache-from` flag is used to reuse build results from previous run.
+- code checkout
+- npm install
+- build
+- lint
+- test
+- docker image build and publish for `api` and `website`.
+
+## Simple Pipeline
+
+Github actions pipeline is implemented in `.github/workflows/simple.yml`.
+
+Simple pipeline implements optimizations that make sense for repo of any size. Simple pipeline runs all steps of the pipeline sequentially and has following optimizations:
+
+- `node_modules` are cached and reused in all jobs. This makes `npm install` really fast.
+- Turborepo remote cache is setup, so build agents can use and create entries in remote cache. This makes the whole pipeline very fast as most of the time command results are retrieved from cache.
+- When building docker images `--cache-from` flag is used to reuse build results from previous run.
+
+Execution time ~2min.
+
+## Complex Pipeline
+
+Github actions pipeline is implemented in `.github/workflows/complex.yml`.
+
+Complex pipeline adds couple of more optimizations that would make a difference only if you have very big codebase:
+
+- Using turborepo we are running tasks only for affected packages.
+- Docker builds is done in parallel in separate jobs.
+
+Execution time ~2min.
+
+For smaller repositories these additional optimizations don't add any benefit as doing work in separate jobs requires additional setup steps to checkout code, restore `node_modules` cache, and then build docker images, so before adding complexity to your pipeline make sure to assess the benefits.

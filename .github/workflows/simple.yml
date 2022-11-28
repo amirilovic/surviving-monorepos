@@ -1,4 +1,4 @@
-name: Build
+name: Simple
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-simple
   cancel-in-progress: true
