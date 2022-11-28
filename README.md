@@ -492,7 +492,7 @@ Execution time ~2min.
 
 Github actions pipeline is implemented in `.github/workflows/complex.yml`.
 
-Complex pipeline adds couple of more optimizations that would make a difference only if you have very big codebase:
+Complex pipeline adds couple of more optimizations that would make a difference only if you have a very big codebase:
 
 - Using turborepo we are running tasks only for affected packages.
 - Docker builds is done in parallel in separate jobs.
