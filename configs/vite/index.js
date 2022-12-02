@@ -1,9 +1,9 @@
-const { defineConfig } = require('vite');
-const { onSuccess } = require('./vite-on-success-plugin');
-const react = require('@vitejs/plugin-react')
-const { checker } = require('vite-plugin-checker')
+import { defineConfig } from 'vite';
+import { onSuccess } from 'vite-plugin-on-success';
+import react from '@vitejs/plugin-react'
+import { checker } from 'vite-plugin-checker'
 
-module.exports = defineConfig({
+export default defineConfig({
     test: {
         globals: true,
         watch: false,
