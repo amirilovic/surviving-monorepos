@@ -17,7 +17,9 @@
     "lint:fix": "turbo run lint -- --fix",
     "build": "turbo run build",
     "build:affected": "turbo run build --filter=${BASE_COMMIT:-...[origin/main]}",
-    "dev": "turbo run dev --parallel"
+    "dev": "turbo run dev --parallel",
+    "dev:api": "turbo run dev --filter=@shop/api... --parallel",
+    "dev:website": "turbo run dev --filter=@shop/website... --parallel"
   },
   "repository": {
     "type": "git",

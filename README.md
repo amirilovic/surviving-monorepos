@@ -301,7 +301,9 @@ In our root `package.json` we define following commands using turborepo in `scri
   "lint:fix": "turbo run lint -- --fix",
   "build": "turbo run build",
   "build:affected": "turbo run build --filter=${BASE_COMMIT:-...[origin/main]}",
-  "dev": "turbo run dev --parallel"
+  "dev": "turbo run dev --parallel",
+  "dev:api": "turbo run dev --filter=@shop/api... --parallel",
+  "dev:website": "turbo run dev --filter=@shop/website... --parallel"
 }
 ```
 
@@ -330,6 +332,8 @@ $ npm run build:affected
 ```
 
 In the output you should see that build was executed only for `@shop/logger` and `@shop/api` packages since no other package is affected by the change 😍
+
+If your repo has multiple applications like `api` and `website` you can also use turborepo to start development only for subset of packages that are related to one application. In our package.json we have `dev:api` and `dev:website` commands that can start development mode for packages need for api or website only.
 
 ### Turborepo Cache
 
