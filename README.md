@@ -1,6 +1,6 @@
-# Effective Monorepos
+# Monorepos at scale
 
-- [Effective Monorepos](#effective-monorepos)
+- [Monorepos at scale](#monorepos-at-scale)
   - [What is a Monorepo?](#what-is-a-monorepo)
   - [Monorepos with Node.js](#monorepos-with-nodejs)
   - [Example](#example)
@@ -24,9 +24,9 @@
 
 ## What is a Monorepo?
 
-> In version-control systems, a monorepo is a software-development strategy in which the code for a **number of projects** is stored in the **same repository**.
+> A monorepo is a single repository containing **multiple distinct projects**, with **well-defined relationships**.
 
-[https://en.wikipedia.org/wiki/Monorepo](https://en.wikipedia.org/wiki/Monorepo)
+[https://monorepo.tools/#what-is-a-monorepo](https://monorepo.tools/#what-is-a-monorepo)
 
 Pros:
 
@@ -49,7 +49,7 @@ Putting all your company code or code from different products in one repo **is n
 
 It is much more practical and efficient to separate repositories per product area and enable teams to colocate related code and be autonomous.
 
-⇒ Monorepo is not really mono 😉
+You are probably going to end up with **multiple monorepos** in one company split per domain! 😉
 
 ## Monorepos with Node.js
 
@@ -62,12 +62,14 @@ Historically Node.js had very poor support for structuring complex applications 
 
 Lets build a dummy ecom website that has a frontend application and an api. We also need to have library of our design system components and we have some shared utilities like logger.
 
+![repo](docs/assets/repo.png)
+
 The purpose of the demo is to show how to implement common tasks in a Monorepo:
 
+- [x] Sharing configuration files for different tools
 - [x] Running everything in development mode
 - [x] Running lint
 - [x] Running tests
-- [x] Sharing configuration files for different tools
 - [x] Building docker images
 - [x] Pipeline
   - [x] `build`, `test` and `lint` only affected packages
@@ -80,6 +82,7 @@ The purpose of the demo is to show how to implement common tasks in a Monorepo:
 - [eslint](https://eslint.org/) for code style rules.
 - [prettier](https://prettier.io/) for code formatting rules.
 - [vitest](https://vitest.dev/) for unit testing.
+- [Turborepo](https://turbo.build/repo) for orchestrating tasks between packages.
 
 ## NPM Workspace
 
