@@ -6,9 +6,6 @@
   "license": "MIT",
   "devDependencies": {
     "@vitejs/plugin-react": "^2.2.0",
-    "debug": "^4.3.4",
-    "execa": "^6.1.0",
-    "tree-kill": "^1.2.2",
     "vite": "^3.2.4",
     "vite-plugin-checker": "^0.5.1",
     "vite-plugin-on-success": "^0.0.3"
