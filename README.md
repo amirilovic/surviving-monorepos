@@ -60,7 +60,7 @@ Historically Node.js had very poor support for structuring complex applications 
 
 ## Example
 
-Lets build a dummy ecom website that has a frontend application and an api. We also need to have library of our design system components and we have some shared utilities like logger.
+Lets build a dummy e-com website that has a frontend application and an api. We also need to have library of our design system components and we have some shared utilities like logger.
 
 ![repo](docs/assets/repo.png)
 
@@ -72,7 +72,8 @@ The purpose of the demo is to show how to implement common tasks in a Monorepo:
 - [x] Running tests
 - [x] Building docker images
 - [x] Pipeline
-  - [x] `build`, `test` and `lint` only affected packages
+  - [x] `build`, `test`, `lint` for only affected packages
+  - [x] `publish docker images` for only affected apps
 
 ## Tools & Frameworks
 
@@ -503,7 +504,7 @@ Complex pipeline adds couple of more optimizations that would make a difference 
 
 - Using turborepo we are running tasks only for affected packages.
 - Docker builds is done in parallel in separate jobs.
-- Docker build is ran only if application is affected. This is done using `Trampoline-CX/action-turbo-changed@v1` github action. Action uses `turborepo` under the hood to determine if package is affected by commit changes. 
+- Docker build is ran only if application is affected. This is done using `Trampoline-CX/action-turbo-changed@v1` github action. Action uses `turborepo` under the hood to determine if package is affected by commit changes.
 
 Execution time when both apps are published ~2min, execution time when apps are not affected by changes ~1min.
 
