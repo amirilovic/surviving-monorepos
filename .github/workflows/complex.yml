@@ -47,12 +47,23 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 2
+          fetch-depth: 0
+      - name: Set BASE_COMMIT
+        if: github.ref_name == 'main'
+        run: echo "BASE_COMMIT=[HEAD^1]" >> $GITHUB_ENV
+      - run: 'echo "BASE_COMMIT: $BASE_COMMIT"'
+      - name: changed in last commit?
+        id: changedAction
+        uses: Trampoline-CX/action-turbo-changed@v1
+        with:
+          workspace: "@shop/api"
+          from: ${{ env.BASE_COMMIT }}
       - uses: actions/setup-node@v3
         with:
           node-version: "18.12.1"
           cache: "npm"
       - name: Cache node modules
+        if: steps.changedAction.outputs.changed == 'true'
         id: cache-nodemodules
         uses: actions/cache@v3
         env:
@@ -66,15 +77,20 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - run: npm install
+        if: steps.changedAction.outputs.changed == 'true'
       - run: npx turbo build --filter=@shop/api
+        if: steps.changedAction.outputs.changed == 'true'
       - run: npx turbo prune --scope=@shop/api --docker
+        if: steps.changedAction.outputs.changed == 'true'
       - name: Login to GitHub Container Registry
+        if: steps.changedAction.outputs.changed == 'true'
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build the api docker image
+        if: steps.changedAction.outputs.changed == 'true'
         run: |
           docker build  \
             -f apps/api/Dockerfile \
@@ -88,12 +104,23 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 2
+          fetch-depth: 0
+      - name: Set BASE_COMMIT
+        if: github.ref_name == 'main'
+        run: echo "BASE_COMMIT=[HEAD^1]" >> $GITHUB_ENV
+      - run: 'echo "BASE_COMMIT: $BASE_COMMIT"'
+      - name: changed in last commit?
+        id: changedAction
+        uses: Trampoline-CX/action-turbo-changed@v1
+        with:
+          workspace: "@shop/api"
+          from: ${{ env.BASE_COMMIT }}
       - uses: actions/setup-node@v3
         with:
           node-version: "18.12.1"
           cache: "npm"
       - name: Cache node modules
+        if: steps.changedAction.outputs.changed == 'true'
         id: cache-nodemodules
         uses: actions/cache@v3
         env:
@@ -107,15 +134,20 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - run: npm install
+        if: steps.changedAction.outputs.changed == 'true'
       - run: npx turbo build --filter=@shop/website
+        if: steps.changedAction.outputs.changed == 'true'
       - run: npx turbo prune --scope=@shop/website --docker
+        if: steps.changedAction.outputs.changed == 'true'
       - name: Login to GitHub Container Registry
+        if: steps.changedAction.outputs.changed == 'true'
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build the website docker image
+        if: steps.changedAction.outputs.changed == 'true'
         run: |
           docker build  \
             -f apps/api/Dockerfile \
