@@ -113,7 +113,7 @@ jobs:
         id: changedAction
         uses: Trampoline-CX/action-turbo-changed@v1
         with:
-          workspace: "@shop/api"
+          workspace: "@shop/website"
           from: ${{ env.BASE_COMMIT }}
       - uses: actions/setup-node@v3
         with:

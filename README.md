@@ -493,7 +493,7 @@ Simple pipeline implements optimizations that make sense for repo of any size. S
 - Turborepo remote cache is setup, so build agents can use and create entries in remote cache. This makes the whole pipeline very fast as most of the time command results are retrieved from cache.
 - When building docker images `--cache-from` flag is used to reuse build results from previous run.
 
-Execution time ~2min.
+Execution time ~2min regardless of changes.
 
 ## Complex Pipeline
 
@@ -503,7 +503,8 @@ Complex pipeline adds couple of more optimizations that would make a difference 
 
 - Using turborepo we are running tasks only for affected packages.
 - Docker builds is done in parallel in separate jobs.
+- Docker build is ran only if application is affected. This is done using `Trampoline-CX/action-turbo-changed@v1` github action. Action uses `turborepo` under the hood to determine if package is affected by commit changes. 
 
-Execution time ~2min.
+Execution time when both apps are published ~2min, execution time when apps are not affected by changes ~1min.
 
 For smaller repositories these additional optimizations don't add any benefit as doing work in separate jobs requires additional setup steps to checkout code, restore `node_modules` cache, and then build docker images, so before adding complexity to your pipeline make sure to assess the benefits.
