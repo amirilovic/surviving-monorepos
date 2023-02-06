@@ -9,6 +9,8 @@ jobs:
     env:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+      DOCKER_USERNAME: ${{ github.repository_owner }}
+      DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -53,8 +55,4 @@ jobs:
       - run: pnpm run build:affected
       - run: pnpm run lint:affected
       - run: pnpm run test:affected
-      - run: 'echo "username: ${{ secrets.github.actor }} pass: ${{ secrets.GITHUB_TOKEN }}"'
       - run: pnpm run deploy:affected
-        env:
-          DOCKER_USERNAME: ${{ secrets.github.actor }}
-          DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
