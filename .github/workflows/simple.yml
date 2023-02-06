@@ -53,6 +53,7 @@ jobs:
       - run: pnpm run build:affected
       - run: pnpm run lint:affected
       - run: pnpm run test:affected
+      - run: 'echo "username: ${{ secrets.github.actor }} pass: ${{ secrets.GITHUB_TOKEN }}"'
       - run: pnpm run deploy:affected
         env:
           DOCKER_USERNAME: ${{ secrets.github.actor }}
