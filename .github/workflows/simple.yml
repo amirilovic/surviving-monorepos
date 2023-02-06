@@ -9,66 +9,51 @@ jobs:
     env:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+      DOCKER_USERNAME: ${{ secrets.github.actor }}
+      DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+      DOCKER_REGISTRY: ghcr.io
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 2
+          fetch-depth: 0
       - uses: actions/setup-node@v3
         with:
           node-version: "18.12.1"
-          cache: "npm"
-      - name: Cache node modules
-        id: cache-nodemodules
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-node-modules
+
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        id: pnpm-install
         with:
-          # caching node_modules
-          path: node_modules
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          version: 7
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
+            ${{ runner.os }}-pnpm-store-
+
+      - name: find last sucessfull build commit
+        uses: nrwl/nx-set-shas@v3
+
         # Setting BASE_COMMIT to:
-        #  - on "main" run only for packages which changed since last commit
-        #  - on other branches run for all packages which changed compared to current origin/master (default option in package.json)
+        #  - on "main" run only for packages which changed since last successful build
+        #  - on other branches run for all packages which changed compared to current origin/main (default option in package.json)
       - name: Set BASE_COMMIT
         if: github.ref_name == 'main'
-        run: echo "BASE_COMMIT=[HEAD^1]" >> $GITHUB_ENV
+        run: echo "BASE_COMMIT=[${{ env.NX_BASE }}]" >> $GITHUB_ENV
       - run: 'echo "BASE_COMMIT: $BASE_COMMIT"'
-      - run: npm install
-      - run: npm run build
-      - run: npm run lint
-      - run: npm run test
-      - run: npx turbo prune --scope=@shop/api --docker
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build the api docker image
-        run: |
-          docker build  \
-            -f apps/api/Dockerfile \
-            -t ghcr.io/amirilovic/effective-monorepos-api:latest \
-            --cache-from=ghcr.io/amirilovic/effective-monorepos-api:latest \
-            .
-          docker push ghcr.io/amirilovic/effective-monorepos-api:latest
-      - run: rm -rf ./out
-      - run: npx turbo prune --scope=@shop/website --docker
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build the website docker image
-        run: |
-          docker build  \
-            -f apps/api/Dockerfile \
-            -t ghcr.io/amirilovic/effective-monorepos-website:latest \
-            --cache-from=ghcr.io/amirilovic/effective-monorepos-website:latest \
-            .
-          docker push ghcr.io/amirilovic/effective-monorepos-website:latest
+
+      - run: pnpm install
+      - run: pnpm run build:affected
+      - run: pnpm run lint:affected
+      - run: pnpm run test:affected
+      - run: pnpm run deploy:affected

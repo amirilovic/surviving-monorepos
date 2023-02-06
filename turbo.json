@@ -14,6 +14,10 @@
     "dev": {
       "cache": false,
       "dependsOn": ["^build"]
+    },
+    "deploy": {
+      "cache": false,
+      "dependsOn": ["^build"]
     }
   }
 }
