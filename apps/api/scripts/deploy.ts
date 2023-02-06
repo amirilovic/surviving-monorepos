@@ -5,7 +5,7 @@ const image = "ghcr.io/amirilovic/effective-monorepos-api:latest";
 async function deploy() {
   await $`pnpm -F @shop/website deploy --prod out`;
 
-  await $`echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USERNAME --password-stdin ghcr.io`;
+  await $`echo "$DOCKER_PASSWORD" | docker login ghcr.io -u "$DOCKER_USERNAME" --password-stdin`;
 
   await $`docker build -f ./out/Dockerfile \
         -t ${image} \
