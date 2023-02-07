@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "deploy": "tsx scripts/deploy.ts"
   },
   "devDependencies": {
     "@shop/tsconfig": "*",
@@ -15,9 +16,12 @@
     "@types/react": "18.0.25",
     "@types/react-dom": "18.0.9",
     "eslint": "8.28.0",
-    "eslint-config-next": "13.0.5",
     "eslint-config-custom": "*",
-    "typescript": "4.9.3"
+    "eslint-config-next": "13.0.5",
+    "tsx": "^3.12.3",
+    "typescript": "^4.9.3",
+    "vitest": "^0.25.3",
+    "zx": "^7.1.1"
   },
   "dependencies": {
     "@shop/design-system": "*",
