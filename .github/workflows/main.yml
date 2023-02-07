@@ -1,6 +1,6 @@
-name: Simple
+name: main
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}-simple
+  group: ${{ github.workflow }}-${{ github.ref }}-main
   cancel-in-progress: true
 on: [push]
 jobs:

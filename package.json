@@ -1,11 +1,6 @@
 {
   "name": "shop",
   "private": true,
-  "workspaces": [
-    "configs/*",
-    "packages/*",
-    "apps/*"
-  ],
   "version": "1.0.0",
   "description": "",
   "main": "index.js",

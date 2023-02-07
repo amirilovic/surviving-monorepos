@@ -1,12 +1,13 @@
-# Monorepos at scale
+# Surviving Monorepos
 
-- [Monorepos at scale](#monorepos-at-scale)
+- [Surviving Monorepos](#surviving-monorepos)
   - [What is a Monorepo?](#what-is-a-monorepo)
   - [Monorepos with Node.js](#monorepos-with-nodejs)
   - [Example](#example)
   - [Tools \& Frameworks](#tools--frameworks)
-  - [NPM Workspace](#npm-workspace)
-    - [What is a npm workspace?](#what-is-a-npm-workspace)
+  - [Install PNPM](#install-pnpm)
+  - [PNPM Workspace](#pnpm-workspace)
+    - [What is a pnpm workspace?](#what-is-a-pnpm-workspace)
   - [Package Structure](#package-structure)
   - [Configs](#configs)
   - [eslint](#eslint)
@@ -18,9 +19,9 @@
     - [Turborepo Remote Cache](#turborepo-remote-cache)
     - [Why Turborepo and not nx?](#why-turborepo-and-not-nx)
   - [Dockerfile](#dockerfile)
+  - [Docker build](#docker-build)
+  - [Deploy](#deploy)
   - [CI Pipeline with Github actions](#ci-pipeline-with-github-actions)
-  - [Simple Pipeline](#simple-pipeline)
-  - [Complex Pipeline](#complex-pipeline)
 
 ## What is a Monorepo?
 
@@ -77,7 +78,8 @@ The purpose of the demo is to show how to implement common tasks in a Monorepo:
 
 ## Tools & Frameworks
 
-- [npm workspace](https://docs.npmjs.com/cli/v7/using-npm/workspaces) to structure everything in one repo.
+- [pnpm](https://pnpm.io/) as package manager
+- [pnpm workspace](https://pnpm.io/workspaces) to structure everything in one repo.
 - [NextJS](https://nextjs.org/) for frontend application.
 - [vite](https://vitejs.dev/) for bundling `packages` and `apps`.
 - [eslint](https://eslint.org/) for code style rules.
@@ -85,13 +87,15 @@ The purpose of the demo is to show how to implement common tasks in a Monorepo:
 - [vitest](https://vitest.dev/) for unit testing.
 - [Turborepo](https://turbo.build/repo) for orchestrating tasks between packages.
 
-## NPM Workspace
+## Install PNPM
 
-### What is a npm workspace?
+To install pnpm, follow the instructions on the [pnpm website](https://pnpm.io/installation).
+
+## PNPM Workspace
+
+### What is a pnpm workspace?
 
 > Workspaces is a generic term that refers to the set of features in the npm cli that provides support to **managing multiple packages** from your local file system from within a singular top-level, **root package**.
-
-[https://docs.npmjs.com/cli/v7/using-npm/workspaces](https://docs.npmjs.com/cli/v7/using-npm/workspaces)
 
 Workspace consists of many npm packages. To create workspace with npm you need to follow these steps:
 
@@ -100,7 +104,7 @@ Workspace consists of many npm packages. To create workspace with npm you need t
 $ mkdir shop
 $ cd shop
 # init new npm package with default options
-$ npm init -y
+$ pnpm init -y
 ```
 
 You will get `package.json` file which will be root for your workspace.
@@ -111,10 +115,18 @@ Root `package.json` needs to have `workspaces` property define and needs to be m
 {
   "name": "shop",
   "private": true,
-  "workspaces": ["configs/*", "packages/*", "apps/*"],
   "version": "1.0.0",
   "description": ""
 }
+```
+
+Create `pnpm-workspace.yaml` file in the root of your workspace:
+
+```yaml
+packages:
+  - apps/*
+  - packages/*
+  - configs/*
 ```
 
 In workspaces we defined that we are going to put all our packages in three groups:
@@ -140,13 +152,13 @@ Asterisk above means that we don't really care about the version of the package.
 Once you setup your workspace you can execute all tasks for the whole repo from the root. For example lets say you want to run tests just for `@shop/api`:
 
 ```bash
-$ npm run test -w @shop/api
+$ pnpm -F @shop/api run test
 ```
 
 you can also add additional params to the command, for example to run test in watch mode:
 
 ```bash
-$ npm run test -w @shop/api -- --watch
+$ pnpm -F @shop/api run test --watch
 ```
 
 ## Package Structure
@@ -157,6 +169,7 @@ When we define a `package` or an `app` we want to define a set of commands that 
 - `test` to run tests for a package. We use `vitest` for this.
 - `build` to transpile typescript into javascript and to produce css from `scss` or any other way of defining styles. We use `vite` for this.
 - `dev` to watch all the source files for changes and to re-build the package when change occurs. We use `vite` for this.
+- `deploy` to build docker image and push it to docker registry.
 
 We will use typescript for all our code. And all our code will be transpiled only to ESM, this means that in each `package.json` you will see `"type": "module"`.
 
@@ -287,6 +300,10 @@ Add turbo.json with following content:
     "dev": {
       "cache": false,
       "dependsOn": ["^build"]
+    },
+    "deploy": {
+      "cache": false,
+      "dependsOn": ["^build"]
     }
   }
 }
@@ -307,7 +324,9 @@ In our root `package.json` we define following commands using turborepo in `scri
   "build:affected": "turbo run build --filter=${BASE_COMMIT:-...[origin/main]}",
   "dev": "turbo run dev --parallel",
   "dev:api": "turbo run dev --filter=@shop/api... --parallel",
-  "dev:website": "turbo run dev --filter=@shop/website... --parallel"
+  "dev:website": "turbo run dev --filter=@shop/website... --parallel",
+  "deploy": "turbo run deploy",
+  "deploy:affected": "turbo run deploy --filter=${BASE_COMMIT:-...[origin/main]}"
 }
 ```
 
@@ -332,7 +351,7 @@ export const logger = pino({
 Run `build:affected` command from the root of the repo:
 
 ```bash
-$ npm run build:affected
+$ pnpm run build:affected
 ```
 
 In the output you should see that build was executed only for `@shop/logger` and `@shop/api` packages since no other package is affected by the change 😍
@@ -346,7 +365,7 @@ Turborepo caches command execution results, what this means is that if you run t
 Lets test this. Run the build command from repo root:
 
 ```bash
-$ npm run build
+$ pnpm run build
 ```
 
 After the first run you should see build for all packages executed and results are shown in the output:
@@ -372,7 +391,7 @@ By default turborepo stores it's cache at `node_modules/.cache/turbo`.
 If you want to execute commands with turbo, but bypass cache completely, just add `--force` flag.
 
 ```bash
-$ npm run build -- --force
+$ pnpm run build --force
 ```
 
 ### Turborepo Remote Cache
@@ -425,18 +444,20 @@ $ npx turbo build --filter=@shop/api
 
 This will make sure all required dependencies are build.
 
-To "select" part of our workspace, with turborepo we use `prune` command:
+## Docker build
+
+Since we have many applications in one repo, we need to be able to build docker images for each of them. We can do that by using [pnpm deploy](https://pnpm.io/cli/deploy) command.
 
 ```bash
-$ npx turbo prune --scope=@shop/api --docker
+$ cd packages/api
+$ pnpm -F @shop/api deploy --prod out
 ```
 
-This will copy necessary part of our repo to `out` directory. And we will use that out directory in our Dockerfile to build the image. More about `prune` command [here](https://turbo.build/repo/docs/handbook/deploying-with-docker).
+This command will copy all the necessary dependencies from our repo needed to run `@shop/api` to `packages/api/out` directory. And we will use that out directory in our Dockerfile to build the image.
 
-Dockerfile for the `api` looks like:
+Dockerfile for `@shop/api` is very simple:
 
 ```Dockerfile
-# RUN DOCKER BUILD FROM ROOT OF THE WORKSPACE!!!
 FROM node:18.12.1-buster-slim AS builder
 
 ENV UV_THREADPOOL_SIZE 64
@@ -446,19 +467,9 @@ ARG COMMIT_ID
 
 WORKDIR /app
 
-# First copy package.json files and package-lock.json
-COPY ./out/json .
-COPY ./out/package-lock.json ./package-lock.json
-
-# Run npm install
-RUN npm ci --omit=dev
-
-# Copy the rest of the files
-COPY ./out/full .
+COPY . .
 
 USER node
-
-WORKDIR /app/apps/api
 
 EXPOSE 3000
 
@@ -467,45 +478,50 @@ ENV PORT=3000
 CMD ["npm", "start"]
 ```
 
-Tricky and important part to leverage docker cache is to first copy all package.json and package-lock.json file, run `npm install` then copy the rest of the files.
+Important to remember is that we need to install all dependencies and build all packages before running `pnpm deploy` command. Otherwise `pnpm deploy` will not be able to find all the necessary dependencies.
 
-Dockerfile for the `website` looks almost the same.
+Dockerfile for `@shop/website` looks the same.
+
+## Deploy
+
+Each application defines it's own deploy script in `scripts/deploy.ts`. In our example, this script is responsible for building docker image and pushing it to docker registry.
+
+Script is written using [google/zx](https://github.com/google/zx) which makes it very easy to write scripts in TypeScript.
+
+We defined deploy command in `package.json`:
+
+```json
+{
+  "scripts": {
+    "deploy": "tsx scripts/deploy.ts"
+  }
+}
+```
+
+and we can run it using pnpm:
+
+```bash
+$ pnpm -F @shop/api run deploy
+```
 
 ## CI Pipeline with Github actions
 
-Two pipelines are implemented in this repository `simple` and `complex`.
-
-Both pipelines do:
+Github actions pipeline is implemented in `.github/workflows/simple.yml`. Pipeline implements following steps:
 
 - code checkout
-- npm install
-- build
-- lint
-- test
-- docker image build and publish for `api` and `website`.
+- pnpm install
+- build:affected
+- lint:affected
+- test:affected
+- deploy:affected
 
-## Simple Pipeline
+Following optimizations are implemented in the pipeline:
 
-Github actions pipeline is implemented in `.github/workflows/simple.yml`.
-
-Simple pipeline implements optimizations that make sense for repo of any size. Simple pipeline runs all steps of the pipeline sequentially and has following optimizations:
-
-- `node_modules` are cached and reused in all jobs. This makes `npm install` really fast.
-- Turborepo remote cache is setup, so build agents can use and create entries in remote cache. This makes the whole pipeline very fast as most of the time command results are retrieved from cache.
+- `node_modules` are cached and reused in all jobs. This makes `pnpm install` really fast.
+- Turborepo remote cache is setup, so build agents can use and create entries in remote cache. This makes the whole pipeline very fast as most of the time command results are retrieved from the cache.
+- Using turborepo we are running tasks only for affected packages. This is done using `nrwl/nx-set-shas@v3` github action. Action finds the latest commit that had successful build and uses it to determine what packages are affected in the meantime.
+- Docker build is running in `deploy` step only if application is affected.
+- Docker builds are done in parallel.
 - When building docker images `--cache-from` flag is used to reuse build results from previous run.
 
-Execution time ~2min regardless of changes.
-
-## Complex Pipeline
-
-Github actions pipeline is implemented in `.github/workflows/complex.yml`.
-
-Complex pipeline adds couple of more optimizations that would make a difference only if you have a very big codebase:
-
-- Using turborepo we are running tasks only for affected packages.
-- Docker builds is done in parallel in separate jobs.
-- Docker build is ran only if application is affected. This is done using `Trampoline-CX/action-turbo-changed@v1` github action. Action uses `turborepo` under the hood to determine if package is affected by commit changes.
-
-Execution time when both apps are published ~2min, execution time when apps are not affected by changes ~1min.
-
-For smaller repositories these additional optimizations don't add any benefit as doing work in separate jobs requires additional setup steps to checkout code, restore `node_modules` cache, and then build docker images, so before adding complexity to your pipeline make sure to assess the benefits.
+Full pipeline execution time is ~2min, without docker build it is ~1min.
