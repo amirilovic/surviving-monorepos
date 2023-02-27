@@ -7,6 +7,7 @@
   - [Tools \& Frameworks](#tools--frameworks)
   - [Install PNPM](#install-pnpm)
   - [PNPM Workspace](#pnpm-workspace)
+    - [Why using pnpm and not npm or yarn?](#why-using-pnpm-and-not-npm-or-yarn)
     - [What is a pnpm workspace?](#what-is-a-pnpm-workspace)
   - [Package Structure](#package-structure)
   - [Configs](#configs)
@@ -92,6 +93,15 @@ The purpose of the demo is to show how to implement common tasks in a Monorepo:
 To install pnpm, follow the instructions on the [pnpm website](https://pnpm.io/installation).
 
 ## PNPM Workspace
+
+### Why using pnpm and not npm or yarn?
+
+- pnpm uses symlinks to when installing dependencies https://pnpm.io/symlinked-node-modules-structure. This has multiple benefits:
+  - Storage of node_modules is much more efficient
+  - It handles multiple versions of the same package in one repo much better
+  - It requires every package to declare correctly all its dependencies - nothing relies on root node_modules.
+- pnpm is faster than npm and yarn: https://pnpm.io/benchmarks
+- pnpm supports advanced features https://pnpm.io/feature-comparison
 
 ### What is a pnpm workspace?
 
