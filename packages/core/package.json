@@ -1,5 +1,5 @@
 {
-  "name": "@shop/logger",
+  "name": "@shop/core",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -25,9 +25,5 @@
     "typescript": "^5.2.2",
     "vite": "^4.5.0",
     "vitest": "^0.34.6"
-  },
-  "dependencies": {
-    "@shop/core": "workspace:^0.0.0",
-    "pino": "^8.16.0"
   }
 }

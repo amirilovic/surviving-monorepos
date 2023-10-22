@@ -1,6 +1,6 @@
-import { app } from "./app";
+import { app } from "./app.js";
 import { logger } from "@shop/logger";
-import { config } from "./config";
+import { config } from "./config.js";
 
 async function start() {
   app.listen(config.port, () => {

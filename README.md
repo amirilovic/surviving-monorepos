@@ -13,7 +13,7 @@
   - [Configs](#configs)
   - [eslint](#eslint)
   - [tsconfig](#tsconfig)
-  - [tsup](#tsup)
+  - [vite](#vite)
   - [Turborepo](#turborepo)
     - [What is Turborepo?](#what-is-turborepo)
     - [Turborepo Cache](#turborepo-cache)
@@ -82,7 +82,7 @@ The purpose of the demo is to show how to implement common tasks in a Monorepo:
 - [pnpm](https://pnpm.io/) as package manager
 - [pnpm workspace](https://pnpm.io/workspaces) to structure everything in one repo.
 - [NextJS](https://nextjs.org/) for frontend application.
-- [tsup](https://tsup.egoist.dev/) for bundling `packages` and `apps`.
+- [vite](https://vite.dev/) for bundling `packages`.
 - [eslint](https://eslint.org/) for code style rules.
 - [prettier](https://prettier.io/) for code formatting rules.
 - [vitest](https://vitest.dev/) for unit testing.
@@ -141,7 +141,7 @@ packages:
 
 In workspaces we defined that we are going to put all our packages in three groups:
 
-- `configs` will hold all packages with sharable configuration files for tools that we use. In our example we have `eslint-config-custom (eslint-config-custom)`, `tsconfig (@shop/tsconfig)` and `tsup (@shop/tsup)`.
+- `configs` will hold all packages with sharable configuration files for tools that we use. In our example we have `eslint-config-custom (eslint-config-custom)`, `tsconfig (@shop/tsconfig)` and `vite (@shop/vite)`.
 - `apps` will hold all executable packages from our system. These can be `apis`, `websites`, `cli tools`, anything that is executed directly and not referenced like a package by anything else in the system. In our example we have `api (@shop/api)` and `website (@shop/website)`.
 - `packages` will hold all packages that we want extract as logical or sharable parts of our codebase. These packages can be UI components or backend services that can be used by one or many `apps` or other `packages`. In our example we have: `logger (@shop/logger)` and `design-system (@shop/design-system)`.
 
@@ -177,7 +177,7 @@ When we define a `package` or an `app` we want to define a set of commands that 
 
 - `lint` to check the code style of all files in a package. We use `eslint` for this.
 - `test` to run tests for a package. We use `vitest` for this.
-- `build` to transpile typescript into javascript and to produce css from `scss` or any other way of defining styles. We use `tsup` for this.
+- `build` to transpile typescript into javascript and to produce css from `scss` or any other way of defining styles. We use `vite` for this.
 - `dev` to watch all the source files for changes and to re-build the package when change occurs. We use `tsx` for this.
 - `deploy` to build docker image and push it to docker registry.
 
@@ -251,20 +251,19 @@ In `packages/logger/tsconfig.json`:
 }
 ```
 
-## tsup
+## vite
 
-Sharable configuration is defined in `configs/tsup`. Configuration is defined to do following tasks:
+`vite` is used as a bundler for all packages. Sharable configuration is defined in `configs/vite`. Configuration is defined to do following tasks:
 
-- build everything only as ES modules
-- build doesn't build any package dependency, only builds files inside of the package.
-- build bundles everything to `dist/index.js` and if there are styles, they will be in `dist/index.css`.
+- builds everything only as ES modules.
+- builds files only inside of the package, it treats all other .
+- dev mode watches for all referenced files in the repo and rebuilds the package when any change occurs. This means when `@shop/core` is changed `vite` will rebuild it and since `@shop/logger` is watching for changes in `core/dist` it will also be rebuilt.
+- build bundles everything to `dist/index.js` and if there are styles, they will be in `dist/style.css`.
 - build outputs `sourcemaps`, so that you can easily debug from typescript source files.
-- build does typescript types check.
-- configuration includes scss support. Files with `.modules.scss` are treated as css modules and files with `.scss` are treated as global styles.
-- since `tsup` doesn't watch `node_modules` in it's default watch mode, configuration includes custom code to watch for changes in workspace packages which current package depends on. For example: if `@shop/api` depends on `@shop/logger` and `@shop/logger` changes, `@shop/api` will be rebuilt. We use environment variable `TSUP_WATCH_WORKSPACE` to turn this feature on.
+- build does type checking and generates typescript definition files `.d.ts`.
 - test contains configuration for vitest globals, so that you don't have to explicitly import `describe`, `it` in every `spec` file.
 
-In general any build tool could work, as long as you implement above requirements.
+You can use any other build tool like `tsup`, `webpack` or `rollup` instead of `vite`, as long as above requirements are met.
 
 ## Turborepo
 
@@ -430,8 +429,8 @@ Pros
 Cons
 
 - Much more complex to setup and understand. It is a very generic and powerful tool and because of that it is simply harder to get started with.
-- Wraps common tools in custom plugins with custom configuration forcing you to do setup your repo in a very different way. With Turborepo you setup everything as you usually would do and you just add it at the end in 5mins.
-- Remote cache option is a paid feature, with Turborepo it is free and you can easily self-host it.
+- It wraps common tools in custom plugins with custom configuration forcing you to do setup your repo in a very different way. With Turborepo you setup everything as you usually would do and you just add it at the end in 5mins.
+- Remote cache option is a paid feature (NX does have generous free tier 👏), with Turborepo it is free and you can easily self-host it.
 
 In general I would use nx if I had a really big repo, but on the other hand I don’t want to have a really big repo ever again 😉
 
@@ -459,11 +458,11 @@ This will make sure all required dependencies are build.
 Since we have many applications in one repo, we need to be able to build docker images for each of them. We can do that by using [pnpm deploy](https://pnpm.io/cli/deploy) command.
 
 ```bash
-$ cd packages/api
+$ cd apps/api
 $ pnpm -F @shop/api deploy --prod out
 ```
 
-This command will copy all the necessary dependencies from our repo needed to run `@shop/api` to `packages/api/out` directory. And we will use that out directory in our Dockerfile to build the image.
+This command will copy all the necessary dependencies from our repo needed to run `@shop/api` to `apps/api/out` directory. And we will use that out directory in our Dockerfile to build the image.
 
 Dockerfile for `@shop/api` is very simple:
 

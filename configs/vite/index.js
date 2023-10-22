@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
-import { onSuccess } from 'vite-plugin-on-success';
 import react from '@vitejs/plugin-react'
 import { checker } from 'vite-plugin-checker'
+import dts from 'vite-plugin-dts'
 
 export default defineConfig({
     test: {
@@ -10,9 +10,7 @@ export default defineConfig({
         environment: 'node'
     },
     build: {
-        ssr: {
-            external: ['@shop/logger'],
-        },
+        ssr: true,
         sourcemap: true,
         lib: {
             entry: 'src/index.ts',
@@ -20,5 +18,5 @@ export default defineConfig({
             fileName: 'index'
         }
     },
-    plugins: [checker({ typescript: true }), react(), onSuccess()]
+    plugins: [!process.env.VITEST ? checker({ typescript: true }) : undefined, dts(), react()]
 });

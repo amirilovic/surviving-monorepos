@@ -11,21 +11,19 @@
     "./*": "./dist/*"
   },
   "scripts": {
-    "dev": "TSUP_WATCH_WORKSPACE=true npm run build",
-    "build": "tsup",
+    "dev": "pnpm build --watch --emptyOutDir=false",
+    "build": "vite build",
     "test": "vitest",
-    "test:watch": "npm run test -- --watch",
+    "test:watch": "pnpm test --watch",
     "lint": "eslint ."
   },
   "devDependencies": {
     "@shop/tsconfig": "*",
-    "@shop/tsup": "workspace:^0.0.0",
     "@shop/vite": "workspace:^0.0.0",
     "@types/react": "^18.2.31",
     "eslint": "^8.52.0",
     "eslint-config-custom": "*",
     "sass": "^1.69.4",
-    "tsup": "^7.2.0",
     "typescript": "^5.2.2",
     "vite": "^4.5.0",
     "vitest": "^0.34.6"
