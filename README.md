@@ -47,7 +47,7 @@ Cons:
 - CI complexity - build and deployment pipelines become very complex
 - Major dependency updates become hell - you need to do updates across a large codebase that no single person understands as a whole
 
-Putting all your company code or code from different products in one repo **is not a good idea** if you are not Google, Meta, Microsoft…
+Putting all your company code or code from different products in one repo **is not a good idea** if unless you are Google, Meta, Microsoft…
 
 It is much more practical and efficient to separate repositories per product area and enable teams to colocate related code and be autonomous.
 
