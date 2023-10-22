@@ -10,7 +10,9 @@ export default defineConfig({
         environment: 'node'
     },
     build: {
-        ssr: true,
+        ssr: {
+            external: ['@shop/logger'],
+        },
         sourcemap: true,
         lib: {
             entry: 'src/index.ts',

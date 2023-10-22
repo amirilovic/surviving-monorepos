@@ -5,9 +5,10 @@
   "type": "module",
   "license": "MIT",
   "devDependencies": {
-    "@vitejs/plugin-react": "^2.2.0",
-    "vite": "^3.2.4",
-    "vite-plugin-checker": "^0.5.1",
-    "vite-plugin-on-success": "^0.0.3"
+    "@vitejs/plugin-react": "^4.1.0",
+    "vite": "^4.5.0",
+    "vite-plugin-checker": "^0.6.2",
+    "vite-plugin-externals": "^0.6.2",
+    "vite-plugin-on-success": "^1.0.1"
   }
 }

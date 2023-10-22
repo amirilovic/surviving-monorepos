@@ -5,6 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "test": "turbo run test",
     "test:affected": "turbo run test --filter=${BASE_COMMIT:-...[origin/main]}",
     "lint": "turbo run lint",
@@ -16,7 +17,9 @@
     "dev:api": "turbo run dev --filter=@shop/api... --parallel",
     "dev:website": "turbo run dev --filter=@shop/website... --parallel",
     "deploy": "turbo run deploy",
-    "deploy:affected": "turbo run deploy --filter=${BASE_COMMIT:-...[origin/main]}"
+    "deploy:affected": "turbo run deploy --filter=${BASE_COMMIT:-...[origin/main]}",
+    "deps:check": "npx npm-check-updates --deep",
+    "deps:update": "pnpm deps:check -u && pnpm install"
   },
   "repository": {
     "type": "git",
@@ -30,6 +33,6 @@
   },
   "homepage": "https://github.com/amirilovic/effective-monorepos#readme",
   "devDependencies": {
-    "turbo": "^1.6.3"
+    "turbo": "^1.10.16"
   }
 }
