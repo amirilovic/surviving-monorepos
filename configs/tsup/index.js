@@ -29,8 +29,8 @@ export default defineConfig(() => {
 
     // Watch all dist folders from workspace dependencies
     if (process.env.TSUP_WATCH_WORKSPACE === 'true') {
+        const packageJsonPath = path.resolve('./package.json');
         pathsToWatch = getWatchPaths(packageJsonPath);
-        pathsToWatch.push(srcPath);
     }
 
     return {
