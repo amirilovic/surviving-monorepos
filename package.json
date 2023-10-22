@@ -19,7 +19,8 @@
     "deploy": "turbo run deploy",
     "deploy:affected": "turbo run deploy --filter=${BASE_COMMIT:-...[origin/main]}",
     "deps:check": "npx npm-check-updates --deep",
-    "deps:update": "pnpm deps:check -u && pnpm install"
+    "deps:update": "pnpm deps:check -u && pnpm install",
+    "watch": "tsx watch.ts"
   },
   "repository": {
     "type": "git",

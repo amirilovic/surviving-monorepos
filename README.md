@@ -13,7 +13,7 @@
   - [Configs](#configs)
   - [eslint](#eslint)
   - [tsconfig](#tsconfig)
-  - [vite](#vite)
+  - [tsup](#tsup)
   - [Turborepo](#turborepo)
     - [What is Turborepo?](#what-is-turborepo)
     - [Turborepo Cache](#turborepo-cache)
@@ -82,7 +82,7 @@ The purpose of the demo is to show how to implement common tasks in a Monorepo:
 - [pnpm](https://pnpm.io/) as package manager
 - [pnpm workspace](https://pnpm.io/workspaces) to structure everything in one repo.
 - [NextJS](https://nextjs.org/) for frontend application.
-- [vite](https://vitejs.dev/) for bundling `packages` and `apps`.
+- [tsup](https://tsup.egoist.dev/) for bundling `packages` and `apps`.
 - [eslint](https://eslint.org/) for code style rules.
 - [prettier](https://prettier.io/) for code formatting rules.
 - [vitest](https://vitest.dev/) for unit testing.
@@ -141,7 +141,7 @@ packages:
 
 In workspaces we defined that we are going to put all our packages in three groups:
 
-- `configs` will hold all packages with sharable configuration files for tools that we use. In our example we have `eslint-config-custom (eslint-config-custom)`, `tsconfig (@shop/tsconfig)` and `vite (@shop/vite)`.
+- `configs` will hold all packages with sharable configuration files for tools that we use. In our example we have `eslint-config-custom (eslint-config-custom)`, `tsconfig (@shop/tsconfig)` and `tsup (@shop/tsup)`.
 - `apps` will hold all executable packages from our system. These can be `apis`, `websites`, `cli tools`, anything that is executed directly and not referenced like a package by anything else in the system. In our example we have `api (@shop/api)` and `website (@shop/website)`.
 - `packages` will hold all packages that we want extract as logical or sharable parts of our codebase. These packages can be UI components or backend services that can be used by one or many `apps` or other `packages`. In our example we have: `logger (@shop/logger)` and `design-system (@shop/design-system)`.
 
@@ -177,8 +177,8 @@ When we define a `package` or an `app` we want to define a set of commands that 
 
 - `lint` to check the code style of all files in a package. We use `eslint` for this.
 - `test` to run tests for a package. We use `vitest` for this.
-- `build` to transpile typescript into javascript and to produce css from `scss` or any other way of defining styles. We use `vite` for this.
-- `dev` to watch all the source files for changes and to re-build the package when change occurs. We use `vite` for this.
+- `build` to transpile typescript into javascript and to produce css from `scss` or any other way of defining styles. We use `tsup` for this.
+- `dev` to watch all the source files for changes and to re-build the package when change occurs. We use `tsx` for this.
 - `deploy` to build docker image and push it to docker registry.
 
 We will use typescript for all our code. And all our code will be transpiled only to ESM, this means that in each `package.json` you will see `"type": "module"`.
@@ -251,18 +251,18 @@ In `packages/logger/tsconfig.json`:
 }
 ```
 
-## vite
+## tsup
 
-Sharable configuration is defined in `configs/vite`. Configuration is defined to do following tasks:
+Sharable configuration is defined in `configs/tsup`. Configuration is defined to do following tasks:
 
 - build everything only as ES modules
 - build doesn't build any package dependency, only builds files inside of the package.
-- build bundles everything to `dist/index.js` and if there are styles, they will be in `dist/styles.css`.
+- build bundles everything to `dist/index.js` and if there are styles, they will be in `dist/index.css`.
 - build outputs `sourcemaps`, so that you can easily debug from typescript source files.
 - build does typescript types check.
-- build has an option to run a command when build is successful. We use this when we run `dev` command for `apps/api` to start the server after build.
+- configuration includes scss support. Files with `.modules.scss` are treated as css modules and files with `.scss` are treated as global styles.
+- since `tsup` doesn't watch `node_modules` in it's default watch mode, configuration includes custom code to watch for changes in workspace packages which current package depends on. For example: if `@shop/api` depends on `@shop/logger` and `@shop/logger` changes, `@shop/api` will be rebuilt. We use environment variable `TSUP_WATCH_WORKSPACE` to turn this feature on.
 - test contains configuration for vitest globals, so that you don't have to explicitly import `describe`, `it` in every `spec` file.
-- includes `react` plugin, so that you don't have to import `react` in each `.tsx` file.
 
 In general any build tool could work, as long as you implement above requirements.
 
