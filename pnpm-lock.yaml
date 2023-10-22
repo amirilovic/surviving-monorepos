@@ -122,7 +122,22 @@ importers:
       vite-plugin-dts: 3.6.0_cnaluuumdmttzz4zpr3jp6tchm
 
   packages/core:
-    specifiers: {}
+    specifiers:
+      '@shop/tsconfig': '*'
+      '@shop/vite': workspace:^0.0.0
+      eslint: ^8.52.0
+      eslint-config-custom: '*'
+      typescript: ^5.2.2
+      vite: ^4.5.0
+      vitest: ^0.34.6
+    devDependencies:
+      '@shop/tsconfig': link:../../configs/tsconfig
+      '@shop/vite': link:../../configs/vite
+      eslint: 8.52.0
+      eslint-config-custom: link:../../configs/eslint-config-custom
+      typescript: 5.2.2
+      vite: 4.5.0
+      vitest: 0.34.6
 
   packages/design-system:
     specifiers:
