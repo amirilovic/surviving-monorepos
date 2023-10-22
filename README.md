@@ -18,11 +18,13 @@
     - [What is Turborepo?](#what-is-turborepo)
     - [Turborepo Cache](#turborepo-cache)
     - [Turborepo Remote Cache](#turborepo-remote-cache)
-    - [Why Turborepo and not nx?](#why-turborepo-and-not-nx)
   - [Dockerfile](#dockerfile)
   - [Docker build](#docker-build)
   - [Deploy](#deploy)
   - [CI Pipeline with Github actions](#ci-pipeline-with-github-actions)
+  - [FAQ](#faq)
+    - [Why Turborepo and not nx?](#why-turborepo-and-not-nx)
+  - [Why not use typescript project references?](#why-not-use-typescript-project-references)
 
 ## What is a Monorepo?
 
@@ -420,29 +422,6 @@ Vercel, company that sponsors turborepo development, offers free remote cache st
 
 There are many open source implementations of turborepo remote cache, so you can self-host remote cache server. One that I used: https://github.com/Tapico/tapico-turborepo-remote-cache.
 
-### Why Turborepo and not nx?
-
-Currently nx is much more powerful tool than turborepo, here is my list of pros and cons.
-
-Pros
-
-- nx is around for many years and is developed by an amazing team.
-- It supports all features from Turborepo and much more.
-- It can be used for any language, not just Node.js.
-- Has very advanced build features like distributed task execution!
-- Has support for code templates.
-- Has very nice dashboards that show how much time it saved you:
-
-![Nx Remote Cache Dashboard](docs/assets/nx-dashboard.png)
-
-Cons
-
-- Much more complex to setup and understand. It is a very generic and powerful tool and because of that it is simply harder to get started with.
-- It wraps common tools in custom plugins with custom configuration forcing you to do setup your repo in a very different way. With Turborepo you setup everything as you usually would do and you just add it at the end in 5mins.
-- Remote cache option is a paid feature (NX does have generous free tier 👏), with Turborepo it is free and you can easily self-host it.
-
-In general I would use nx if I had a really big repo, but on the other hand I don’t want to have a really big repo ever again 😉
-
 ## Dockerfile
 
 We create `Dockerfile` for each deployable application, in our example we have `api` and `website` apps. We want our docker images to contain only necessary files run one specific app - we don't want to put whole node_modules in every docker image as this is going to increase image sizes significantly.
@@ -543,3 +522,45 @@ Following optimizations are implemented in the pipeline:
 - When building docker images `--cache-from` flag is used to reuse build results from previous run.
 
 Full pipeline execution time is ~2min, without docker build it is ~1min. If only `README.md` is change, build takes around ~30s.
+
+## FAQ
+
+### Why Turborepo and not nx?
+
+Currently nx is much more powerful tool than turborepo, here is my list of pros and cons.
+
+Pros
+
+- nx is around for many years and is developed by an amazing team.
+- It supports all features from Turborepo and much more.
+- It can be used for any language, not just Node.js.
+- Has very advanced build features like distributed task execution!
+- Has support for code templates.
+- Has very nice dashboards that show how much time it saved you:
+
+![Nx Remote Cache Dashboard](docs/assets/nx-dashboard.png)
+
+Cons
+
+- Much more complex to setup and understand. It is a very generic and powerful tool and because of that it is simply harder to get started with.
+- It wraps common tools in custom plugins with custom configuration forcing you to do setup your repo in a very different way. With Turborepo you setup everything as you usually would do and you just add it at the end in 5mins.
+- Remote cache option is a paid feature (NX does have generous free tier 👏), with Turborepo it is free and you can easily self-host it.
+
+In general I would use nx if I had a really big repo, but on the other hand I don’t want to have a really big repo ever again 😉
+
+## Why not use typescript project references?
+
+[Typescript project references](https://www.typescriptlang.org/docs/handbook/project-references.html) are a great feature, but I for me they have couple of downsides:
+
+- I didn't find a simple way to use them without duplicating dependency configuration that already exists in `package.json` files.
+- Build tools need to be explicitly configured to use typescript project references with [tsconfig-paths](https://www.npmjs.com/package/tsconfig-paths) or [tsc-alias](https://www.npmjs.com/package/tsc-alias) which adds more complexity.
+- Development mode vs production build is very different which can complicates the whole configuration.
+- You end up transpiling on the fly over and over again the same set of files for both the dev mode and for running tests which eventually slows down your development experience.
+- You loose ability to cache build results between runs.
+- If you need to start publishing some packages to npm, configuration becomes unmaintainable.
+
+Instead, my approach is to follow these rules:
+
+- Use only `package.json` to define dependencies between packages and use only `pnpm` and `turbo` to orchestrate tasks between packages.
+- Every package is configured as if it is going to be published to npm. This means it has to be built first before it can be used by the other apps and packages in the workspace. It should be built only when needed and only once. Build output should be cached by `turbo`. At the same time the consumer of the package should not care if the package is local a package workspace package or a package downloaded from npm, it uses both in the same way.
+- An app or a package needs to have a way to watch for changes in all of it's dependencies and to rebuild/restart it's self when change occurs. This can be done using `vite build --watch`, `next dev` or `tsx watch` for example.
