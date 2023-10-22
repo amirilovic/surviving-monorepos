@@ -186,9 +186,9 @@ When we define a `package` or an `app` we want to define a set of commands that 
 
 - `lint` to check the code style of all files in a package. We use `eslint` for this.
 - `test` to run tests for a package. We use `vitest` for this.
-- `build` to transpile typescript into javascript and to produce css from `scss` or any other way of defining styles. We use `vite` for this.
-- `dev` to watch for changes in any dependant source file and to re-build the package or restart the application when change occurs. For packages we use `vite` for this, for `api` use `tsx` and for `website` we use `nextjs`. You can you any tool or framework as long as you configure it to restart or rebuild when any dependant file changes.
-- `deploy` used in `api` and `website` to build docker image and push it to docker registry.
+- `build` to transpile typescript into javascript and to produce css from `scss` or any other way of defining styles. For packages we use `vite` for this, for `api` we simply use `tsc` and for `website` we use `next build`.
+- `dev` to watch for changes in any dependant source file and to re-build the package or restart the application when change occurs. This means for example, when we run `dev` and we change `logger` we want `logger` to be built and `api` and `website` to be restarted and new `logger` changes to be applied as those apps both depend on the `@shop/logger`. To support this in packages we use `vite`, for `api` use `tsx` and for `website` we use `next` dev command. You can you any tool or framework as long as you configure it to restart or rebuild when any dependant file changes.
+- `deploy` is used in `api` and `website` to build docker image and push it to docker registry.
 
 We will use typescript for all our code. And all our code will be transpiled only to ESM, this means that in each `package.json` you will see `"type": "module"`.
 
