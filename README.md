@@ -82,6 +82,7 @@ The purpose of the demo is to show how to implement common tasks in a Monorepo:
 - [pnpm](https://pnpm.io/) as package manager
 - [pnpm workspace](https://pnpm.io/workspaces) to structure everything in one repo.
 - [NextJS](https://nextjs.org/) for frontend application.
+- [tsx](https://www.npmjs.com/package/tsx) for running `api` server in development mode. We also use it to transplie typescript on the fly and to run them, like deploy script below for example.
 - [vite](https://vite.dev/) for bundling `packages`.
 - [eslint](https://eslint.org/) for code style rules.
 - [prettier](https://prettier.io/) for code formatting rules.
@@ -141,9 +142,17 @@ packages:
 
 In workspaces we defined that we are going to put all our packages in three groups:
 
-- `configs` will hold all packages with sharable configuration files for tools that we use. In our example we have `eslint-config-custom (eslint-config-custom)`, `tsconfig (@shop/tsconfig)` and `vite (@shop/vite)`.
-- `apps` will hold all executable packages from our system. These can be `apis`, `websites`, `cli tools`, anything that is executed directly and not referenced like a package by anything else in the system. In our example we have `api (@shop/api)` and `website (@shop/website)`.
-- `packages` will hold all packages that we want extract as logical or sharable parts of our codebase. These packages can be UI components or backend services that can be used by one or many `apps` or other `packages`. In our example we have: `logger (@shop/logger)` and `design-system (@shop/design-system)`.
+- `configs` will hold all packages with sharable configuration files for tools that we use. In our example we have:
+  - `eslint-config-custom (eslint-config-custom)` sharable eslint configuration.
+  - `tsconfig (@shop/tsconfig)` sharable typescript configuration.
+  - `vite (@shop/vite)` sharable vite configuration.
+- `apps` will hold all executable packages from our system. These can be `apis`, `websites`, `cli tools`, anything that is executed directly and not referenced like a package by anything else in the system. In our example we have:
+  - `api (@shop/api)` example api implementation using express.
+  - `website (@shop/website)` example website implementation using nextjs.
+- `packages` will hold all packages that we want extract as logical or sharable parts of our codebase. These packages can be UI components or backend services that can be used by one or many `apps` or other `packages`. In our example we have:
+  - `logger (@shop/logger)` simple logger package that is used in both `api` and `website`.
+  - `design-system (@shop/design-system)` dummy package acting as a design system package.
+  - `core (@shop/core)` dummy core package that is used by the `logger` just to demonstrate how nested dependencies work.
 
 Inside the workspace packages can reference each other like any other package on npm. For example in `@shop/api` in folder `apps/api` we want to use logger from `@shop/logger`, so we add it to `apps/api/package.json`:
 
@@ -178,8 +187,8 @@ When we define a `package` or an `app` we want to define a set of commands that 
 - `lint` to check the code style of all files in a package. We use `eslint` for this.
 - `test` to run tests for a package. We use `vitest` for this.
 - `build` to transpile typescript into javascript and to produce css from `scss` or any other way of defining styles. We use `vite` for this.
-- `dev` to watch all the source files for changes and to re-build the package when change occurs. We use `tsx` for this.
-- `deploy` to build docker image and push it to docker registry.
+- `dev` to watch for changes in any dependant source file and to re-build the package or restart the application when change occurs. For packages we use `vite` for this, for `api` use `tsx` and for `website` we use `nextjs`. You can you any tool or framework as long as you configure it to restart or rebuild when any dependant file changes.
+- `deploy` used in `api` and `website` to build docker image and push it to docker registry.
 
 We will use typescript for all our code. And all our code will be transpiled only to ESM, this means that in each `package.json` you will see `"type": "module"`.
 

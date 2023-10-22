@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@shop/design-system": "*",
+    "@shop/logger": "workspace:*",
     "next": "13.5.6",
     "react": "18.2.0",
     "react-dom": "18.2.0"

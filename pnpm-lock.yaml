@@ -54,6 +54,7 @@ importers:
   apps/website:
     specifiers:
       '@shop/design-system': '*'
+      '@shop/logger': workspace:*
       '@shop/tsconfig': '*'
       '@types/node': 20.8.7
       '@types/react': 18.2.31
@@ -70,6 +71,7 @@ importers:
       zx: ^7.2.3
     dependencies:
       '@shop/design-system': link:../../packages/design-system
+      '@shop/logger': link:../../packages/logger
       next: 13.5.6_biqbaboplfbrettd7655fr4n2y
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
@@ -118,6 +120,9 @@ importers:
       vite: 4.5.0
       vite-plugin-checker: 0.6.2_cnaluuumdmttzz4zpr3jp6tchm
       vite-plugin-dts: 3.6.0_cnaluuumdmttzz4zpr3jp6tchm
+
+  packages/core:
+    specifiers: {}
 
   packages/design-system:
     specifiers:

@@ -25,11 +25,11 @@ app.use(
     _req: express.Request,
     res: express.Response,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _next: express.NextFunction
+    _next: express.NextFunction,
   ) => {
     logger.error({ err: error }, "Internal Server Error");
     res.status(500).send({ message: "InternalServerError" });
-  }
+  },
 );
 
 export { app };
