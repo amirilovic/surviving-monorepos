@@ -7,7 +7,8 @@ export default defineConfig({
     test: {
         globals: true,
         watch: false,
-        environment: 'node'
+        environment: 'node',
+        include: ['src/**/*.spec.ts', 'src/**/*.spec.tsx'],
     },
     build: {
         ssr: true,
