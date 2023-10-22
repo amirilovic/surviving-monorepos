@@ -1,6 +1,6 @@
 import { $ } from "zx";
 
-const image = "ghcr.io/amirilovic/effective-monorepos-api:latest";
+const image = "ghcr.io/amirilovic/surviving-monorepos-api:latest";
 
 async function deploy() {
   await $`pnpm -F @shop/website deploy --prod out`;

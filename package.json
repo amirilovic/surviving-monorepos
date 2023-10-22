@@ -23,15 +23,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/amirilovic/effective-monorepos.git"
+    "url": "git+https://github.com/amirilovic/surviving-monorepos.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/amirilovic/effective-monorepos/issues"
+    "url": "https://github.com/amirilovic/surviving-monorepos/issues"
   },
-  "homepage": "https://github.com/amirilovic/effective-monorepos#readme",
+  "homepage": "https://github.com/amirilovic/surviving-monorepos#readme",
   "devDependencies": {
     "turbo": "^1.10.16"
   }
