@@ -542,4 +542,4 @@ Following optimizations are implemented in the pipeline:
 - Docker builds are done in parallel.
 - When building docker images `--cache-from` flag is used to reuse build results from previous run.
 
-Full pipeline execution time is ~2min, without docker build it is ~1min.
+Full pipeline execution time is ~2min, without docker build it is ~1min. If only `README.md` is change, build takes around ~30s.
