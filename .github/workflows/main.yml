@@ -52,7 +52,7 @@ jobs:
       - run: 'echo "BASE_COMMIT: $BASE_COMMIT"'
 
       - run: pnpm install
-      - run: pnpm run build:affected
-      - run: pnpm run lint:affected
-      - run: pnpm run test:affected
-      - run: pnpm run deploy:affected
+      - run: pnpm build:affected
+      - run: pnpm lint:affected
+      - run: pnpm test:affected
+      - run: pnpm deploy:affected

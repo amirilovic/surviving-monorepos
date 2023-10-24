@@ -443,28 +443,34 @@ This will make sure all required dependencies are build.
 
 ## Docker build
 
-Since we have many applications in one repo, we need to be able to build docker images for each of them. We can do that by using [pnpm deploy](https://pnpm.io/cli/deploy) command.
+Since we have many applications in one repo, we need to be able to build docker images for each of them. To do this we use [turbo prune](https://turbo.build/repo/docs/reference/command-line-reference/prune) feature. This feature allows us to copy only necessary files from our repo to a new directory and then we can use that directory to build docker image.
+
+For example, to prepare files for `@shop/api`, go to the root of the repo and run:
 
 ```bash
-$ cd apps/api
-$ pnpm -F @shop/api deploy --prod out
+$ npx turbo prune --filter=@shop/api
 ```
 
-This command will copy all the necessary dependencies from our repo needed to run `@shop/api` to `apps/api/out` directory. And we will use that out directory in our Dockerfile to build the image.
+This command will copy all the necessary dependencies from our repo needed to run `@shop/api` to `out` directory in the root of the repo. And we will use that `out` directory in our Dockerfile to build the image. In the `out` folder you will find `json` and `full` folders, explanations for those you can find in the official docs [here](https://turbo.build/repo/docs/reference/command-line-reference/prune).
 
 Dockerfile for `@shop/api` is very simple:
 
 ```Dockerfile
 FROM node:18.12.1-buster-slim AS builder
 
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+
 ENV UV_THREADPOOL_SIZE 64
 ENV NODE_ENV=production
 
-ARG COMMIT_ID
-
 WORKDIR /app
 
-COPY . .
+COPY ./json .
+RUN pnpm install --prod --frozen-lockfile
+
+COPY ./full .
 
 USER node
 
@@ -472,16 +478,18 @@ EXPOSE 3000
 
 ENV PORT=3000
 
-CMD ["npm", "start"]
+WORKDIR apps/api
+
+CMD ["pnpm", "start"]
 ```
 
-Important to remember is that we need to install all dependencies and build all packages before running `pnpm deploy` command. Otherwise `pnpm deploy` will not be able to find all the necessary dependencies.
+> 💡NOTE: Important to remember is that we need to build the app before building the docker image.
 
-Dockerfile for `@shop/website` looks the same.
+Dockerfile for `@shop/website` looks almost the same.
 
 ## Deploy
 
-Each application defines it's own deploy script in `scripts/deploy.ts`. In our example, this script is responsible for building docker image and pushing it to docker registry.
+Each application defines it's own deploy script in `scripts/deploy.ts`. In our example, this script is responsible for building docker image and pushing it to docker registry. I've intentionally duplicated the code between `@shop/api` and `@shop/website` as deploy steps may differ for each application, you should of course organize/reuse the code for deployment however you see fit.
 
 Script is written using [google/zx](https://github.com/google/zx) which makes it very easy to write scripts in TypeScript.
 
@@ -500,6 +508,8 @@ and we can run it using pnpm:
 ```bash
 $ pnpm -F @shop/api run deploy
 ```
+
+You need to use `run` above as `deploy` also exists as a command in `pnpm` and it will try to run it instead of running our script.
 
 ## CI Pipeline with Github actions
 
