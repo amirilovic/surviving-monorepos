@@ -572,5 +572,5 @@ In general I would use nx if I had a really big repo, but on the other hand I do
 Instead, my approach is to follow these rules:
 
 - Use only `package.json` to define dependencies between packages and use only `pnpm` and `turbo` to orchestrate tasks between packages.
-- Every package is configured as if it is going to be published to npm. This means it has to be built first before it can be used by the other apps and packages in the workspace. It should be built only when needed and only once. Build output should be cached by `turbo`. At the same time the consumer of the package should not care if the package is local a package workspace package or a package downloaded from npm, it uses both in the same way.
+- Every package is configured as if it is going to be published to npm. This means it has to be built first before it can be used by the other apps and packages in the workspace. It should be built only when needed and only once. Build output should be cached by `turbo`. At the same time the consumer of the package should not care if the a local workspace package or a package downloaded from npm, it uses both in the same way.
 - An app or a package needs to have a way to watch for changes in all of it's dependencies and to rebuild/restart it's self when change occurs. This can be done using `vite build --watch`, `next dev` or `tsx watch` for example.
