@@ -20,7 +20,7 @@ async function deploy({
   await $`npx turbo run build --filter=${packageName}...`;
 
   await $`npx turbo prune ${packageName} --docker --out-dir=${outDir}`;
-  
+
   // use .dockerignore to exclude source code and node_modules from the image
   await $`cp  ${packagePath}/.dockerignore ${outDir}`;
 
