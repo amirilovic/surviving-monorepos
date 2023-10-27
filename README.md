@@ -267,7 +267,7 @@ In `packages/logger/tsconfig.json`:
 `vite` is used as a bundler for all packages. Sharable configuration is defined in `configs/vite`. Configuration is defined to do following tasks:
 
 - builds everything only as ES modules.
-- builds files only inside of the package, it treats all other .
+- builds files only inside of the package, it treats all other as externals.
 - dev mode watches for all referenced files in the repo and rebuilds the package when any change occurs. This means when `@shop/core` is changed `vite` will rebuild it and since `@shop/logger` is watching for changes in `core/dist` it will also be rebuilt.
 - build bundles everything to `dist/index.js` and if there are styles, they will be in `dist/style.css`.
 - build outputs `sourcemaps`, so that you can easily debug from typescript source files.
