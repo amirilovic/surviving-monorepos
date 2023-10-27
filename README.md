@@ -84,7 +84,7 @@ The purpose of the demo is to show how to implement common tasks in a Monorepo:
 - [pnpm](https://pnpm.io/) as package manager
 - [pnpm workspace](https://pnpm.io/workspaces) to structure everything in one repo.
 - [NextJS](https://nextjs.org/) for frontend application.
-- [tsx](https://www.npmjs.com/package/tsx) for running `api` server in development mode. We also use it to transplie typescript on the fly and to run them, like deploy script below for example.
+- [tsx](https://www.npmjs.com/package/tsx) for running `api` server in development mode. We also use it to transpile typescript on the fly and to run them, like deploy script below for example.
 - [vite](https://vite.dev/) for bundling `packages`.
 - [eslint](https://eslint.org/) for code style rules.
 - [prettier](https://prettier.io/) for code formatting rules.
@@ -189,7 +189,7 @@ When we define a `package` or an `app` we want to define a set of commands that 
 - `lint` to check the code style of all files in a package. We use `eslint` for this.
 - `test` to run tests for a package. We use `vitest` for this.
 - `build` to transpile typescript into javascript and to produce css from `scss` or any other way of defining styles. For packages we use `vite` for this, for `api` we simply use `tsc` and for `website` we use `next build`.
-- `dev` to watch for changes in any dependant source file and to re-build the package or restart the application when change occurs. This means for example, when we run `dev` and we change `logger` we want `logger` to be built and `api` and `website` to be restarted and new `logger` changes to be applied as those apps both depend on the `@shop/logger`. To support this in packages we use `vite`, for `api` use `tsx` and for `website` we use `next` dev command. You can you any tool or framework as long as you configure it to restart or rebuild when any dependant file changes.
+- `dev` to watch for changes in any dependant source file and to rebuild the package or restart the application when change occurs. This means for example, when we run `dev` and we change `logger` we want `logger` to be built and `api` and `website` to be restarted and new `logger` changes to be applied as those apps both depend on the `@shop/logger`. To support this in packages we use `vite`, for `api` use `tsx` and for `website` we use `next dev` command. You can you any tool or framework as long as you configure it to restart or rebuild when any dependant file changes.
 - `deploy` is used in `api` and `website` to build docker image and push it to docker registry.
 
 We will use typescript for all our code. And all our code will be transpiled only to ESM, this means that in each `package.json` you will see `"type": "module"`.
@@ -416,7 +416,7 @@ $ pnpm run build --force
 
 ### Turborepo Remote Cache
 
-Turborepo has a killer feature to use **remote cache**. What that means is that turborepo can store results of execution on a remote server and then any other developer running turborepo for the first time on their machine will get results from the remote server without really executing underlying command 🤯 This also means that when you checkout `main` branch and run any command, you would get instant results as there CI already ran all the steps for you ❤️.
+Turborepo has a killer feature to use **remote cache**. What that means is that turborepo can store results of execution on a remote server and then any other developer running turborepo for the first time on their local machine will get results from the remote server without really executing the underlying command 🤯 This also means that when you checkout `main` branch and run any command, you would get instant results since the remote server's CI already ran all the steps for you ❤️.
 
 Vercel, company that sponsors turborepo development, offers free remote cache storage. To set it up, follow instructions here https://turbo.build/repo/docs/core-concepts/remote-caching#vercel.
 
@@ -431,7 +431,7 @@ Before building a docker image with only necessary files we need to:
 - Build only packages which our application depends on.
 - Somehow "select" part of our workspace which an application depends on and install dependencies only for those packages.
 
-Of course, Turborepo can does exactly these tasks.
+Of course, Turborepo can do exactly these tasks.
 
 For example, to build only `api`, with turborepo it is enough to run from root of the repo:
 
@@ -439,7 +439,7 @@ For example, to build only `api`, with turborepo it is enough to run from root o
 $ npx turbo build --filter=@shop/api
 ```
 
-This will make sure all required dependencies are build.
+This will make sure all required dependencies are built.
 
 ## Docker build
 
@@ -564,7 +564,7 @@ In general I would use nx if I had a really big repo, but on the other hand I do
 
 - I didn't find a simple way to use them without duplicating dependency configuration that already exists in `package.json` files.
 - Build tools need to be explicitly configured to use typescript project references with [tsconfig-paths](https://www.npmjs.com/package/tsconfig-paths) or [tsc-alias](https://www.npmjs.com/package/tsc-alias) which adds more complexity.
-- Development mode vs production build is very different which can complicates the whole configuration.
+- Development mode and production build are very different which complicates the whole configuration.
 - You end up transpiling on the fly over and over again the same set of files for both the dev mode and for running tests which eventually slows down your development experience.
 - You loose ability to cache build results between runs.
 - If you need to start publishing some packages to npm, configuration becomes unmaintainable.
