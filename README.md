@@ -162,7 +162,7 @@ Inside the workspace packages can reference each other like any other package on
 {
   //...
   "dependencies": {
-    "@shop/logger": "*"
+    "@shop/logger": "workspace:*"
     //...
   }
 }

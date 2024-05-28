@@ -10,12 +10,12 @@
     "deploy": "tsx scripts/deploy.ts"
   },
   "devDependencies": {
-    "@shop/tsconfig": "*",
+    "@shop/tsconfig": "workspace:*",
     "@types/node": "20.8.7",
     "@types/react": "18.2.31",
     "@types/react-dom": "18.2.14",
     "eslint": "8.52.0",
-    "eslint-config-custom": "*",
+    "eslint-config-custom": "workspace:*",
     "eslint-config-next": "13.5.6",
     "tsx": "^3.14.0",
     "typescript": "^5.2.2",
@@ -23,7 +23,7 @@
     "zx": "^7.2.3"
   },
   "dependencies": {
-    "@shop/design-system": "*",
+    "@shop/design-system": "workspace:*",
     "@shop/logger": "workspace:*",
     "next": "13.5.6",
     "react": "18.2.0",

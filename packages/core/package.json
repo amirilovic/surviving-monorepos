@@ -18,10 +18,10 @@
     "lint": "eslint ."
   },
   "devDependencies": {
-    "@shop/tsconfig": "*",
+    "@shop/tsconfig": "workspace:*",
     "@shop/vite": "workspace:^0.0.0",
     "eslint": "^8.52.0",
-    "eslint-config-custom": "*",
+    "eslint-config-custom": "workspace:*",
     "typescript": "^5.2.2",
     "vite": "^4.5.0",
     "vitest": "^0.34.6"
