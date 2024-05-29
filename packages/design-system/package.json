@@ -18,11 +18,11 @@
     "lint": "eslint ."
   },
   "devDependencies": {
-    "@shop/tsconfig": "*",
+    "@shop/tsconfig": "workspace:*",
     "@shop/vite": "workspace:^0.0.0",
     "@types/react": "^18.2.31",
     "eslint": "^8.52.0",
-    "eslint-config-custom": "*",
+    "eslint-config-custom": "workspace:*",
     "sass": "^1.69.4",
     "typescript": "^5.2.2",
     "vite": "^4.5.0",
