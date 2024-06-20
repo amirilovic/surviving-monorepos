@@ -9,7 +9,7 @@ app.use(helmet({ contentSecurityPolicy: false }));
 app.use(express.json());
 app.use(cors());
 
-app.get("/manage/info", (_req: express.Request, res: express.Response) => {
+app.get("/_manage/info", (_req: express.Request, res: express.Response) => {
   const message = "Everything is awesome!";
   printMessage(message);
   res.status(200).send(message);
