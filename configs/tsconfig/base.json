@@ -9,7 +9,7 @@
     "forceConsistentCasingInFileNames": true,
     "inlineSources": false,
     "module": "ESNext",
-    "moduleResolution": "Bundler",
+    "moduleResolution": "Node",
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "preserveWatchOutput": true,
