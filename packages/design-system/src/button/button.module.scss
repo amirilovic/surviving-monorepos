@@ -1,23 +1,49 @@
-.primary {
-  padding: 50px;
-  background: red;
+@mixin base {
+  background-color: var(--background, hsl(0, 0%, 100%));
+  padding: 8px 16px;
+  border-radius: 4px;
+
+  &:hover {
+    filter: saturate(1.2) brightness(112.5%);
+  }
+
+  &:active {
+    transition-duration: 0.1s;
+    filter: saturate(1.2) brightness(120%);
+  }
 }
 
-//.base {
-//  background-color: var(--background);
-//  color: var(--text-color);
-//  padding: 8px 16px;
-//  border-radius: 4px;
-//}
-//
-//.primary {
-//  @extend .base;
-//  --background: hsl(var(--background-primary));
-//  --text-color: hsl(var(--text-color-primary));
-//}
-//
-//.secondary {
-//  @extend .base;
-//  --background: hsl(var(--background-secondary));
-//  --text-color: hsl(var(--text-color-secondary));
-//}
+@mixin key {
+  transition: all 200ms ease-in-out;
+  --border-width: 0.2em;
+  --border-width-neg: calc(var(--border-width) * -1);
+  box-shadow: var(--border-width-neg) var(--border-width) 0 var(--border-color, currentColor);
+  transform: translate(var(--border-width), var(--border-width-neg));
+  border-width: 1px;
+  border-color: var(--border-color, currentColor);
+
+  &:active {
+    --border-width: 0.1em;
+  }
+}
+
+.default {
+  @include base;
+  @include key;
+  color: hsl(var(--border-base));
+}
+
+.primary {
+  @include base;
+  transform: translate(0.1em, -0.1em) scale(1.04);
+  background-color: hsl(var(--background-primary));
+  color: hsl(var(--text-color-primary));
+}
+
+.secondary {
+  @include base;
+  @include key;
+  background-color: hsl(var(--background-secondary));
+  color: hsl(var(--text-color-secondary));
+}
+

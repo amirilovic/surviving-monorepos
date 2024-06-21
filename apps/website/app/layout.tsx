@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geologica } from "next/font/google";
 import "../styles/main.scss";
+import "@shop/design-system/style.css";
 
 const geologica = Geologica({ subsets: ["latin"], variable: "--font-sans" });
 
