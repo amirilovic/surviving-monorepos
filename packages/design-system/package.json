@@ -18,17 +18,18 @@
     "lint": "eslint ."
   },
   "devDependencies": {
+    "@shop/core": "workspace:*",
     "@shop/tsconfig": "workspace:*",
     "@shop/vite": "workspace:^0.0.0",
-    "@types/react": "^18.2.31",
-    "eslint": "^8.52.0",
+    "@types/react": "^18.3.3",
+    "eslint": "^8.57.0",
     "eslint-config-custom": "workspace:*",
-    "sass": "^1.69.4",
-    "typescript": "^5.2.2",
-    "vite": "^4.5.0",
-    "vitest": "^0.34.6"
+    "sass": "^1.77.6",
+    "typescript": "^5.5.2",
+    "vite": "^5.3.1",
+    "vitest": "^1.6.0"
   },
   "dependencies": {
-    "react": "^18.2.0"
+    "react": "^18.3.1"
   }
 }

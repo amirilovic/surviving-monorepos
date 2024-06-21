@@ -27,12 +27,13 @@
   },
   "keywords": [],
   "author": "",
+  "packageManager": "pnpm@9.4.0",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/amirilovic/surviving-monorepos/issues"
   },
   "homepage": "https://github.com/amirilovic/surviving-monorepos#readme",
   "devDependencies": {
-    "turbo": "^1.10.16"
+    "turbo": "^2.0.4"
   }
 }

@@ -1,0 +1,25 @@
+/* Base Colors */
+
+:root {
+  --border-base: 0, 0%, 80%;
+  --background-primary: 212, 100%, 48%;
+  --background-secondary: 240, 11%, 5%;
+  --text-color-primary: 10, 5%, 20%;
+  --text-color-secondary: 204, 13%, 55%;
+  --text-placeholder: 218, 11%, 65%;
+}
+
+input, textarea {
+  &::placeholder {
+    opacity: 1;
+    color: var(--text-placeholder);
+  }
+}
+
+p {
+  color: hsl(var(--text-color-secondary));
+}
+
+*, ::before, ::after {
+  border-color: hsl(var(--border-base));
+}

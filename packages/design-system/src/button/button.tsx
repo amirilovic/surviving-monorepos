@@ -1,15 +1,15 @@
 import styles from "./button.module.scss";
+import { cn } from "@shop/core";
 
-export type ButtonProps = {
-  title: string;
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant: "primary" | "secondary";
-  onClick: () => void;
-};
+}
 
-export function Button(props: ButtonProps) {
+export function Button(props: React.PropsWithChildren<ButtonProps>) {
   return (
-    <button className={styles[props.variant]} onClick={props.onClick}>
-      {props.title}
+    <button {...props} className={cn(styles[props.variant], props.className)}>
+      {props.children}
     </button>
   );
 }
