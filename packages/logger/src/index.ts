@@ -12,3 +12,5 @@ export function printMessage(message: string) {
     console.log(leftPad(message[i], i + 1));
   }
 }
+
+// test

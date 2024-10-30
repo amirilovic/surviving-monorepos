@@ -34,5 +34,8 @@
   "homepage": "https://github.com/amirilovic/surviving-monorepos#readme",
   "devDependencies": {
     "turbo": "^1.10.16"
+  },
+  "dependencies": {
+    "@changesets/cli": "^2.27.1"
   }
 }
