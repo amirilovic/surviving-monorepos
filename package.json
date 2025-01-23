@@ -13,6 +13,8 @@
     "lint:fix": "turbo run lint -- --fix",
     "build": "turbo run build",
     "build:affected": "turbo run build --filter=${BASE_COMMIT:-...[origin/main]}",
+    "build:packages": "turbo --filter='./packages/**' build",
+    "build:watch:packages": "turbo watch --filter='./packages/**' build",
     "dev": "turbo run dev --parallel",
     "dev:api": "turbo run dev --filter=@shop/api... --parallel",
     "dev:website": "turbo run dev --filter=@shop/website... --parallel",
@@ -33,6 +35,7 @@
   },
   "homepage": "https://github.com/amirilovic/surviving-monorepos#readme",
   "devDependencies": {
-    "turbo": "^1.10.16"
-  }
+    "turbo": "^2.3.4"
+  },
+  "packageManager": "pnpm@9.15.0"
 }

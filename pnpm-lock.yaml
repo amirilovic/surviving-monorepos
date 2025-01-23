@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       turbo:
-        specifier: ^1.10.16
-        version: 1.10.16
+        specifier: ^2.3.4
+        version: 2.3.4
 
   apps/api:
     dependencies:
@@ -141,7 +141,7 @@ importers:
         version: 9.0.0(eslint@8.52.0)
       eslint-config-turbo:
         specifier: latest
-        version: 1.10.16(eslint@8.52.0)
+        version: 2.3.4(eslint@8.52.0)(turbo@2.3.4)
       eslint-plugin-prettier:
         specifier: ^5.0.1
         version: 5.0.1(eslint-config-prettier@9.0.0(eslint@8.52.0))(eslint@8.52.0)(prettier@3.0.3)
@@ -525,6 +525,7 @@ packages:
   '@humanwhocodes/config-array@0.11.13':
     resolution: {integrity: sha512-JSBDMiDKSzQVngfRjOdFXgFfklaXI4K9nLF49Auh21lmBWRLIK3+xTErTWD4KU54pb6coM6ESE7Awz/FNU3zgQ==}
     engines: {node: '>=10.10.0'}
+    deprecated: Use @eslint/config-array instead
 
   '@humanwhocodes/module-importer@1.0.1':
     resolution: {integrity: sha512-bxveV4V8v5Yb4ncFTT3rPSgZBOpCkjfK0y4oVVVJwIuDVBRMDXrPyXRL988i5ap9m9bnyEEjWfm5WkBmtffLfA==}
@@ -532,6 +533,7 @@ packages:
 
   '@humanwhocodes/object-schema@2.0.1':
     resolution: {integrity: sha512-dvuCeX5fC9dXgJn9t+X5atfmgQAzUOWqS1254Gh0m6i8wKd10ebXkfNKiRK+1GWi/yTvvLDHpoxLr0xxxeslWw==}
+    deprecated: Use @eslint/object-schema instead
 
   '@jest/schemas@29.6.3':
     resolution: {integrity: sha512-mo5j5X+jIZmJQveBKeS/clAueipV7KgiX1vMgCxam1RNYiqE1w62n0/tJJnHtjW8ZHcQco5gY85jA3mi0L+nSA==}
@@ -1358,10 +1360,11 @@ packages:
     peerDependencies:
       eslint: '>=7.0.0'
 
-  eslint-config-turbo@1.10.16:
-    resolution: {integrity: sha512-O3NQI72bQHV7FvSC6lWj66EGx8drJJjuT1kuInn6nbMLOHdMBhSUX/8uhTAlHRQdlxZk2j9HtgFCIzSc93w42g==}
+  eslint-config-turbo@2.3.4:
+    resolution: {integrity: sha512-MxPl+IKkR7mRGcHoiZAMHYl+RZnjqBsxTLf+IGnx8BrJQe9/CoLT7oBlUxXGvh9bsd5MTaqCxly5h8BE1v/7AA==}
     peerDependencies:
       eslint: '>6.6.0'
+      turbo: '>2.0.0'
 
   eslint-import-resolver-node@0.3.7:
     resolution: {integrity: sha512-gozW2blMLJCeFpBwugLTGyvVjNoeo1knonXAcatC6bjPBZitotxdWf7Gimr25N4c0AAOo4eOUfaG82IJPDpqCA==}
@@ -1436,10 +1439,11 @@ packages:
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8
 
-  eslint-plugin-turbo@1.10.16:
-    resolution: {integrity: sha512-ZjrR88MTN64PNGufSEcM0tf+V1xFYVbeiMeuIqr0aiABGomxFLo4DBkQ7WI4WzkZtWQSIA2sP+yxqSboEfL9MQ==}
+  eslint-plugin-turbo@2.3.4:
+    resolution: {integrity: sha512-9ncoUJkQGkC28NmlQiS17oB9mrE8XaSulRZiB5pv9vmRbYjOfUwyGhY3EIcoBRdww81igxOzXmAmvNNd6GFBPg==}
     peerDependencies:
       eslint: '>6.6.0'
+      turbo: '>2.0.0'
 
   eslint-scope@7.2.2:
     resolution: {integrity: sha512-dOt21O7lTMhDM+X9mB4GX+DZrZtCUJPL/wlcTqxyrx5IvO0IYtILdtrQGQp+8n5S0gwSVmOf9NQrjMOgfQZlIg==}
@@ -1452,6 +1456,7 @@ packages:
   eslint@8.52.0:
     resolution: {integrity: sha512-zh/JHnaixqHZsolRB/w9/02akBk9EPrOs9JwcTP2ek7yL5bVvXuRariiaAjjoJ5DvuwQ1WAE/HsMz+w17YgBCg==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
 
   espree@9.6.1:
@@ -1644,9 +1649,11 @@ packages:
 
   glob@7.1.7:
     resolution: {integrity: sha512-OvD9ENzPLbegENnYP5UUfJIirTg4+XwMWGaQfQTY0JenxNvvIKP3U3/tAQSPIu/lHxXYSZmpXlUHeqAIdKzBLQ==}
+    deprecated: Glob versions prior to v9 are no longer supported
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
+    deprecated: Glob versions prior to v9 are no longer supported
 
   globals@11.12.0:
     resolution: {integrity: sha512-WOBp/EEGUiIsJSp7wcv/y6MO+lV9UoncWqxuFfm8eBwzWNgyfBd6Gz+IeKQ9jCmyhoH99g15M3T+QaVHFjizVA==}
@@ -1761,6 +1768,7 @@ packages:
 
   inflight@1.0.6:
     resolution: {integrity: sha512-k92I/b08q4wvFscXCLvqfsHCrjrF7yiXsQuIVvVE7N82W3+aqpzuUdBbfhWcy/FZR3/4IgflMgKLOsvPDrGCJA==}
+    deprecated: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
 
   inherits@2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
@@ -1987,6 +1995,7 @@ packages:
 
   loupe@2.3.6:
     resolution: {integrity: sha512-RaPMZKiMy8/JruncMU5Bt6na1eftNoo++R4Y+N2FrxkDVTrGvcyzFTsaGif4QTeKESheMGegbhw6iUAq+5A8zA==}
+    deprecated: Please upgrade to 2.3.7 which fixes GHSA-4q6p-r6v2-jvc5
 
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
@@ -2375,6 +2384,7 @@ packages:
 
   rimraf@3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
   rollup@3.29.4:
@@ -2559,6 +2569,7 @@ packages:
   superagent@8.0.9:
     resolution: {integrity: sha512-4C7Bh5pyHTvU33KpZgwrNKh/VQnvgtCSqPRfJAUdmrtSYePVzVg4E4OzsrbkhJj9O7SO6Bnv75K/F8XVZT8YHA==}
     engines: {node: '>=6.4.0 <13 || >=14'}
+    deprecated: Please upgrade to v9.0.0+ as we have fixed a public vulnerability with formidable dependency. Note that v9.0.0+ requires Node.js v14.18.0+. See https://github.com/ladjs/superagent/pull/1800 for insight. This project is supported and maintained by the team at Forward Email @ https://forwardemail.net
 
   supertest@6.3.3:
     resolution: {integrity: sha512-EMCG6G8gDu5qEqRQ3JjjPs6+FYT1a7Hv5ApHvtSghmOFJYtsU5S+pSb6Y2EUeCEY3CmEL3mmQ8YWlPOzQomabA==}
@@ -2638,38 +2649,38 @@ packages:
     resolution: {integrity: sha512-xHtFaKtHxM9LOklMmJdI3BEnQq/D5F73Of2E1GDrITi9sgoVkvIsrQUTY1G8FlmGtA+awCI4EBlTRRYxkL2sRg==}
     hasBin: true
 
-  turbo-darwin-64@1.10.16:
-    resolution: {integrity: sha512-+Jk91FNcp9e9NCLYlvDDlp2HwEDp14F9N42IoW3dmHI5ZkGSXzalbhVcrx3DOox3QfiNUHxzWg4d7CnVNCuuMg==}
+  turbo-darwin-64@2.3.4:
+    resolution: {integrity: sha512-uOi/cUIGQI7uakZygH+cZQ5D4w+aMLlVCN2KTGot+cmefatps2ZmRRufuHrEM0Rl63opdKD8/JIu+54s25qkfg==}
     cpu: [x64]
     os: [darwin]
 
-  turbo-darwin-arm64@1.10.16:
-    resolution: {integrity: sha512-jqGpFZipIivkRp/i+jnL8npX0VssE6IAVNKtu573LXtssZdV/S+fRGYA16tI46xJGxSAivrZ/IcgZrV6Jk80bw==}
+  turbo-darwin-arm64@2.3.4:
+    resolution: {integrity: sha512-IIM1Lq5R+EGMtM1YFGl4x8Xkr0MWb4HvyU8N4LNoQ1Be5aycrOE+VVfH+cDg/Q4csn+8bxCOxhRp5KmUflrVTQ==}
     cpu: [arm64]
     os: [darwin]
 
-  turbo-linux-64@1.10.16:
-    resolution: {integrity: sha512-PpqEZHwLoizQ6sTUvmImcRmACyRk9EWLXGlqceogPZsJ1jTRK3sfcF9fC2W56zkSIzuLEP07k5kl+ZxJd8JMcg==}
+  turbo-linux-64@2.3.4:
+    resolution: {integrity: sha512-1aD2EfR7NfjFXNH3mYU5gybLJEFi2IGOoKwoPLchAFRQ6OEJQj201/oNo9CDL75IIrQo64/NpEgVyZtoPlfhfA==}
     cpu: [x64]
     os: [linux]
 
-  turbo-linux-arm64@1.10.16:
-    resolution: {integrity: sha512-TMjFYz8to1QE0fKVXCIvG/4giyfnmqcQIwjdNfJvKjBxn22PpbjeuFuQ5kNXshUTRaTJihFbuuCcb5OYFNx4uw==}
+  turbo-linux-arm64@2.3.4:
+    resolution: {integrity: sha512-MxTpdKwxCaA5IlybPxgGLu54fT2svdqTIxRd0TQmpRJIjM0s4kbM+7YiLk0mOh6dGqlWPUsxz/A0Mkn8Xr5o7Q==}
     cpu: [arm64]
     os: [linux]
 
-  turbo-windows-64@1.10.16:
-    resolution: {integrity: sha512-+jsf68krs0N66FfC4/zZvioUap/Tq3sPFumnMV+EBo8jFdqs4yehd6+MxIwYTjSQLIcpH8KoNMB0gQYhJRLZzw==}
+  turbo-windows-64@2.3.4:
+    resolution: {integrity: sha512-yyCrWqcRGu1AOOlrYzRnizEtdkqi+qKP0MW9dbk9OsMDXaOI5jlWtTY/AtWMkLw/czVJ7yS9Ex1vi9DB6YsFvw==}
     cpu: [x64]
     os: [win32]
 
-  turbo-windows-arm64@1.10.16:
-    resolution: {integrity: sha512-sKm3hcMM1bl0B3PLG4ifidicOGfoJmOEacM5JtgBkYM48ncMHjkHfFY7HrJHZHUnXM4l05RQTpLFoOl/uIo2HQ==}
+  turbo-windows-arm64@2.3.4:
+    resolution: {integrity: sha512-PggC3qH+njPfn1PDVwKrQvvQby8X09ufbqZ2Ha4uSu+5TvPorHHkAbZVHKYj2Y+tvVzxRzi4Sv6NdHXBS9Be5w==}
     cpu: [arm64]
     os: [win32]
 
-  turbo@1.10.16:
-    resolution: {integrity: sha512-2CEaK4FIuSZiP83iFa9GqMTQhroW2QryckVqUydmg4tx78baftTOS0O+oDAhvo9r9Nit4xUEtC1RAHoqs6ZEtg==}
+  turbo@2.3.4:
+    resolution: {integrity: sha512-1kiLO5C0Okh5ay1DbHsxkPsw9Sjsbjzm6cF85CpWjR0BIyBFNDbKqtUyqGADRS1dbbZoQanJZVj4MS5kk8J42Q==}
     hasBin: true
 
   type-check@0.4.0:
@@ -4253,8 +4264,8 @@ snapshots:
       '@typescript-eslint/parser': 6.8.0(eslint@8.52.0)(typescript@5.2.2)
       eslint: 8.52.0
       eslint-import-resolver-node: 0.3.7
-      eslint-import-resolver-typescript: 3.5.3(eslint-plugin-import@2.28.1(eslint@8.52.0))(eslint@8.52.0)
-      eslint-plugin-import: 2.28.1(@typescript-eslint/parser@6.8.0(eslint@8.52.0)(typescript@5.2.2))(eslint-import-resolver-typescript@3.5.3(eslint-plugin-import@2.28.1(eslint@8.52.0))(eslint@8.52.0))(eslint@8.52.0)
+      eslint-import-resolver-typescript: 3.5.3(eslint-plugin-import@2.28.1)(eslint@8.52.0)
+      eslint-plugin-import: 2.28.1(@typescript-eslint/parser@6.8.0(eslint@8.52.0)(typescript@5.2.2))(eslint-import-resolver-typescript@3.5.3)(eslint@8.52.0)
       eslint-plugin-jsx-a11y: 6.7.1(eslint@8.52.0)
       eslint-plugin-react: 7.33.2(eslint@8.52.0)
       eslint-plugin-react-hooks: 4.6.0(eslint@8.52.0)
@@ -4268,10 +4279,11 @@ snapshots:
     dependencies:
       eslint: 8.52.0
 
-  eslint-config-turbo@1.10.16(eslint@8.52.0):
+  eslint-config-turbo@2.3.4(eslint@8.52.0)(turbo@2.3.4):
     dependencies:
       eslint: 8.52.0
-      eslint-plugin-turbo: 1.10.16(eslint@8.52.0)
+      eslint-plugin-turbo: 2.3.4(eslint@8.52.0)(turbo@2.3.4)
+      turbo: 2.3.4
 
   eslint-import-resolver-node@0.3.7:
     dependencies:
@@ -4281,12 +4293,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-import-resolver-typescript@3.5.3(eslint-plugin-import@2.28.1(eslint@8.52.0))(eslint@8.52.0):
+  eslint-import-resolver-typescript@3.5.3(eslint-plugin-import@2.28.1)(eslint@8.52.0):
     dependencies:
       debug: 4.3.4
       enhanced-resolve: 5.12.0
       eslint: 8.52.0
-      eslint-plugin-import: 2.28.1(@typescript-eslint/parser@6.8.0(eslint@8.52.0)(typescript@5.2.2))(eslint-import-resolver-typescript@3.5.3(eslint-plugin-import@2.28.1(eslint@8.52.0))(eslint@8.52.0))(eslint@8.52.0)
+      eslint-plugin-import: 2.28.1(@typescript-eslint/parser@6.8.0(eslint@8.52.0)(typescript@5.2.2))(eslint-import-resolver-typescript@3.5.3)(eslint@8.52.0)
       get-tsconfig: 4.7.2
       globby: 13.2.2
       is-core-module: 2.11.0
@@ -4295,18 +4307,18 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-module-utils@2.8.0(@typescript-eslint/parser@6.8.0(eslint@8.52.0)(typescript@5.2.2))(eslint-import-resolver-node@0.3.7)(eslint-import-resolver-typescript@3.5.3(eslint-plugin-import@2.28.1(eslint@8.52.0))(eslint@8.52.0))(eslint@8.52.0):
+  eslint-module-utils@2.8.0(@typescript-eslint/parser@6.8.0(eslint@8.52.0)(typescript@5.2.2))(eslint-import-resolver-node@0.3.7)(eslint-import-resolver-typescript@3.5.3)(eslint@8.52.0):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
       '@typescript-eslint/parser': 6.8.0(eslint@8.52.0)(typescript@5.2.2)
       eslint: 8.52.0
       eslint-import-resolver-node: 0.3.7
-      eslint-import-resolver-typescript: 3.5.3(eslint-plugin-import@2.28.1(eslint@8.52.0))(eslint@8.52.0)
+      eslint-import-resolver-typescript: 3.5.3(eslint-plugin-import@2.28.1)(eslint@8.52.0)
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.28.1(@typescript-eslint/parser@6.8.0(eslint@8.52.0)(typescript@5.2.2))(eslint-import-resolver-typescript@3.5.3(eslint-plugin-import@2.28.1(eslint@8.52.0))(eslint@8.52.0))(eslint@8.52.0):
+  eslint-plugin-import@2.28.1(@typescript-eslint/parser@6.8.0(eslint@8.52.0)(typescript@5.2.2))(eslint-import-resolver-typescript@3.5.3)(eslint@8.52.0):
     dependencies:
       array-includes: 3.1.6
       array.prototype.findlastindex: 1.2.3
@@ -4316,7 +4328,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 8.52.0
       eslint-import-resolver-node: 0.3.7
-      eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.8.0(eslint@8.52.0)(typescript@5.2.2))(eslint-import-resolver-node@0.3.7)(eslint-import-resolver-typescript@3.5.3(eslint-plugin-import@2.28.1(eslint@8.52.0))(eslint@8.52.0))(eslint@8.52.0)
+      eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.8.0(eslint@8.52.0)(typescript@5.2.2))(eslint-import-resolver-node@0.3.7)(eslint-import-resolver-typescript@3.5.3)(eslint@8.52.0)
       has: 1.0.3
       is-core-module: 2.13.1
       is-glob: 4.0.3
@@ -4386,10 +4398,11 @@ snapshots:
       semver: 6.3.1
       string.prototype.matchall: 4.0.8
 
-  eslint-plugin-turbo@1.10.16(eslint@8.52.0):
+  eslint-plugin-turbo@2.3.4(eslint@8.52.0)(turbo@2.3.4):
     dependencies:
       dotenv: 16.0.3
       eslint: 8.52.0
+      turbo: 2.3.4
 
   eslint-scope@7.2.2:
     dependencies:
@@ -5703,32 +5716,32 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
 
-  turbo-darwin-64@1.10.16:
+  turbo-darwin-64@2.3.4:
     optional: true
 
-  turbo-darwin-arm64@1.10.16:
+  turbo-darwin-arm64@2.3.4:
     optional: true
 
-  turbo-linux-64@1.10.16:
+  turbo-linux-64@2.3.4:
     optional: true
 
-  turbo-linux-arm64@1.10.16:
+  turbo-linux-arm64@2.3.4:
     optional: true
 
-  turbo-windows-64@1.10.16:
+  turbo-windows-64@2.3.4:
     optional: true
 
-  turbo-windows-arm64@1.10.16:
+  turbo-windows-arm64@2.3.4:
     optional: true
 
-  turbo@1.10.16:
+  turbo@2.3.4:
     optionalDependencies:
-      turbo-darwin-64: 1.10.16
-      turbo-darwin-arm64: 1.10.16
-      turbo-linux-64: 1.10.16
-      turbo-linux-arm64: 1.10.16
-      turbo-windows-64: 1.10.16
-      turbo-windows-arm64: 1.10.16
+      turbo-darwin-64: 2.3.4
+      turbo-darwin-arm64: 2.3.4
+      turbo-linux-64: 2.3.4
+      turbo-linux-arm64: 2.3.4
+      turbo-windows-64: 2.3.4
+      turbo-windows-arm64: 2.3.4
 
   type-check@0.4.0:
     dependencies:

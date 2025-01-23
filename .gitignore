@@ -3,3 +3,5 @@ dist
 .turbo
 out
 .idea
+
+vite.config.js.*
