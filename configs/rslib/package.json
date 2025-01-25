@@ -1,0 +1,15 @@
+{
+  "name": "@shop/rslib",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "devDependencies": {
+    "@rsbuild/plugin-react": "^1.1.0",
+    "@rsbuild/plugin-sass": "^1.2.0",
+    "@rslib/core": "^0.3.2"
+  },
+  "exports": {
+    ".": "./index.js"
+  }
+}

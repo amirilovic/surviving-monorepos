@@ -5,21 +5,22 @@
   "type": "module",
   "license": "MIT",
   "main": "./dist/index.js",
-  "types": "./src/index.ts",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": "./dist/index.js",
     "./*": "./dist/*"
   },
   "scripts": {
-    "dev": "pnpm build --watch --emptyOutDir=false",
-    "build": "vite build",
+    "dev": "pnpm build --watch",
+    "build": "rslib build",
     "test": "vitest",
     "test:watch": "pnpm test --watch",
     "lint": "eslint ."
   },
   "devDependencies": {
+    "@rslib/core": "^0.3.2",
     "@shop/tsconfig": "workspace:*",
-    "@shop/vite": "workspace:^0.0.0",
+    "@shop/rslib": "workspace:*",
     "@types/react": "^18.2.31",
     "eslint": "^8.52.0",
     "eslint-config-custom": "workspace:*",
