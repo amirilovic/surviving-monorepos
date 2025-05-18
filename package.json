@@ -3,6 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
@@ -15,13 +16,16 @@
     "build:affected": "turbo run build --filter=${BASE_COMMIT:-...[origin/main]}",
     "build:packages": "turbo --filter='./packages/**' build",
     "build:watch:packages": "turbo watch --filter='./packages/**' build",
+    "build:api:deps": "turbo run build --filter=@shop/api... --filter=!@shop/api",
+    "build:website:deps": "turbo run build --filter=@shop/website... --filter=!@shop/website",
     "dev": "turbo run dev --parallel",
-    "dev:api": "turbo run dev --filter=@shop/api... --parallel",
-    "dev:website": "turbo run dev --filter=@shop/website... --parallel",
+    "dev:api": "pnpm build:api:deps && turbo run dev --filter=@shop/api... --parallel",
+    "dev:website": "pnpm build:website:deps && turbo run dev --filter=@shop/website... --parallel",
     "deploy": "turbo run deploy",
     "deploy:affected": "turbo run deploy --filter=${BASE_COMMIT:-...[origin/main]}",
     "deps:check": "npx npm-check-updates --deep",
-    "deps:update": "pnpm deps:check -u && pnpm install"
+    "deps:update": "pnpm deps:check -u && pnpm install",
+    "clean": "turbo run clean && rm -rf .turbo"
   },
   "repository": {
     "type": "git",
@@ -35,7 +39,9 @@
   },
   "homepage": "https://github.com/amirilovic/surviving-monorepos#readme",
   "devDependencies": {
-    "turbo": "^2.3.4"
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.27.0",
+    "turbo": "^2.5.3"
   },
-  "packageManager": "pnpm@9.15.0"
+  "packageManager": "pnpm@10.11.0"
 }

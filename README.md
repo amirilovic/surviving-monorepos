@@ -122,7 +122,7 @@ $ pnpm init -y
 
 You will get `package.json` file which will be root for your workspace.
 
-Root `package.json` needs to have `workspaces` property define and needs to be marked was `private`:
+Root `package.json` needs to be marked as `private`:
 
 ```json
 {
@@ -145,7 +145,7 @@ packages:
 In workspaces we defined that we are going to put all our packages in three groups:
 
 - `configs` will hold all packages with sharable configuration files for tools that we use. In our example we have:
-  - `eslint-config-custom (eslint-config-custom)` sharable eslint configuration.
+  - `eslint-config (@shop/eslint-config)` sharable eslint configuration.
   - `tsconfig (@shop/tsconfig)` sharable typescript configuration.
   - `vite (@shop/vite)` sharable vite configuration.
 - `apps` will hold all executable packages from our system. These can be `apis`, `websites`, `cli tools`, anything that is executed directly and not referenced like a package by anything else in the system. In our example we have:
@@ -225,14 +225,14 @@ Since we are going to potentially have many `packages` and `apps` in our repo, w
 
 ## eslint
 
-Sharable configuration is defined in `configs/eslint-config-custom`. We use the global configuration in each of our packages like:
+Sharable configuration is defined in `configs/eslint-config`. We use the global configuration in each of our packages like:
 
 In `packages/logger/.eslintrc`:
 
 ```json
 {
   "root": true,
-  "extends": ["custom"] // eslint knows to look for package called "eslint-config-custom"
+  "extends": ["custom"] // eslint knows to look for package called "eslint-config"
 }
 ```
 
