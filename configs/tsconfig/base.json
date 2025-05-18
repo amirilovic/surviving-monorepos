@@ -16,7 +16,8 @@
     "skipLibCheck": true,
     "strict": true,
     "types": ["vitest/globals"],
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "noEmit": true
   },
   "exclude": ["node_modules"]
 }

@@ -76,10 +76,8 @@ export default function createESLintConfig(importMetaUrl) {
             languageOptions: {
                 parser: tsparser,
                 parserOptions: {
-                    project: path.resolve(dirPath, './tsconfig.json'),
+                    project: path.join(dirPath, 'tsconfig.lint.json'),
                     tsconfigRootDir: dirPath,
-                    sourceType: 'module',
-                    ecmaVersion: 2020,
                 },
             },
             plugins: {

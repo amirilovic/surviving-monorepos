@@ -1,9 +1,10 @@
 {
+  "extends": "@shop/tsconfig/base.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "noEmit": false
   },
-  "exclude": ["node_modules"],
-  "extends": "@shop/tsconfig/base.json",
-  "include": ["**/*.ts", "**/*.tsx"]
+  "exclude": ["**/*.spec.ts"],
+  "include": ["src"]
 }

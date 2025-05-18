@@ -1,9 +1,9 @@
 {
   "extends": "@shop/tsconfig/base.json",
   "compilerOptions": {
-    "outDir": ".dist",
+    "outDir": "./dist",
     "rootDir": "./src"
   },
-  "exclude": ["node_modules"],
-  "include": ["**/*.ts", "**/*.tsx"]
+  "exclude": ["**/*.spec.ts"],
+  "include": ["src"]
 }
