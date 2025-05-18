@@ -456,7 +456,7 @@ This command will copy all the necessary dependencies from our repo needed to ru
 Dockerfile for `@shop/api` is very simple:
 
 ```Dockerfile
-FROM node:18.12.1-buster-slim AS builder
+FROM node:22.15.1-buster-slim AS builder
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
