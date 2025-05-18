@@ -1,0 +1,6 @@
+{
+  "extends": "@shop/tsconfig/base.json",
+  "compilerOptions": {
+    "rootDir": "."
+  }
+}

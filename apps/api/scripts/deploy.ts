@@ -36,6 +36,6 @@ async function deploy({
 deploy({
   image: "ghcr.io/amirilovic/surviving-monorepos-api:latest",
   packageName: "@shop/api",
-  packagePath: `./apps/api`,
+  packagePath: "./apps/api",
   outDir: "./app-out",
 });

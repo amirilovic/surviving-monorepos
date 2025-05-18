@@ -13,7 +13,8 @@
   - [Configs](#configs)
   - [eslint](#eslint)
   - [tsconfig](#tsconfig)
-  - [vite](#vite)
+  - [rslib](#rslib)
+  - [vitest](#vitest)
   - [Turborepo](#turborepo)
     - [What is Turborepo?](#what-is-turborepo)
     - [Turborepo Cache](#turborepo-cache)
@@ -122,7 +123,7 @@ $ pnpm init -y
 
 You will get `package.json` file which will be root for your workspace.
 
-Root `package.json` needs to have `workspaces` property define and needs to be marked was `private`:
+Root `package.json` needs to be marked as `private`:
 
 ```json
 {
@@ -145,7 +146,7 @@ packages:
 In workspaces we defined that we are going to put all our packages in three groups:
 
 - `configs` will hold all packages with sharable configuration files for tools that we use. In our example we have:
-  - `eslint-config-custom (eslint-config-custom)` sharable eslint configuration.
+  - `eslint-config (@shop/eslint-config)` sharable eslint configuration.
   - `tsconfig (@shop/tsconfig)` sharable typescript configuration.
   - `vite (@shop/vite)` sharable vite configuration.
 - `apps` will hold all executable packages from our system. These can be `apis`, `websites`, `cli tools`, anything that is executed directly and not referenced like a package by anything else in the system. In our example we have:
@@ -225,14 +226,14 @@ Since we are going to potentially have many `packages` and `apps` in our repo, w
 
 ## eslint
 
-Sharable configuration is defined in `configs/eslint-config-custom`. We use the global configuration in each of our packages like:
+Sharable configuration is defined in `configs/eslint-config`. We use the global configuration in each of our packages like:
 
 In `packages/logger/.eslintrc`:
 
 ```json
 {
   "root": true,
-  "extends": ["custom"] // eslint knows to look for package called "eslint-config-custom"
+  "extends": ["custom"] // eslint knows to look for package called "eslint-config"
 }
 ```
 
@@ -262,19 +263,22 @@ In `packages/logger/tsconfig.json`:
 }
 ```
 
-## vite
+## rslib
 
-`vite` is used as a bundler for all packages. Sharable configuration is defined in `configs/vite`. Configuration is defined to do following tasks:
+`rslib` is used as a bundler for all packages. Sharable configuration is defined in `configs/rslib`. Configuration is defined to do following tasks:
 
 - builds everything only as ES modules.
 - builds files only inside of the package, it treats all other as externals.
-- dev mode watches for all referenced files in the repo and rebuilds the package when any change occurs. This means when `@shop/core` is changed `vite` will rebuild it and since `@shop/logger` is watching for changes in `core/dist` it will also be rebuilt.
+- dev mode watches for all referenced files in the repo and rebuilds the package when any change occurs. This means when `@shop/core` is changed `rslib` will rebuild it and since `@shop/logger` is watching for changes in `core/dist` it will also be rebuilt.
 - build bundles everything to `dist/index.js` and if there are styles, they will be in `dist/style.css`.
 - build outputs `sourcemaps`, so that you can easily debug from typescript source files.
 - build does type checking and generates typescript definition files `.d.ts`.
-- test contains configuration for vitest globals, so that you don't have to explicitly import `describe`, `it` in every `spec` file.
 
-You can use any other build tool like `tsup`, `webpack` or `rollup` instead of `vite`, as long as above requirements are met.
+You can use any other build tool like `vite`, `tsup`, `webpack` or `rollup` instead of `rslib`, as long as above requirements are met.
+
+## vitest
+
+We use vitest for unit testing. It is configured in `configs/vite` and it is used in all packages.
 
 ## Turborepo
 
@@ -456,7 +460,7 @@ This command will copy all the necessary dependencies from our repo needed to ru
 Dockerfile for `@shop/api` is very simple:
 
 ```Dockerfile
-FROM node:18.12.1-buster-slim AS builder
+FROM node:22.15.1-buster-slim AS builder
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
@@ -560,7 +564,7 @@ In general I would use nx if I had a really big repo, but on the other hand I do
 
 ## Why not use typescript project references?
 
-[Typescript project references](https://www.typescriptlang.org/docs/handbook/project-references.html) are a great feature, but I for me they have couple of downsides:
+[Typescript project references](https://www.typescriptlang.org/docs/handbook/project-references.html) are a great feature, but for me they have couple of downsides:
 
 - I didn't find a simple way to use them without duplicating dependency configuration that already exists in `package.json` files.
 - Build tools need to be explicitly configured to use typescript project references with [tsconfig-paths](https://www.npmjs.com/package/tsconfig-paths) or [tsc-alias](https://www.npmjs.com/package/tsc-alias) which adds more complexity.
@@ -573,4 +577,4 @@ Instead, my approach is to follow these rules:
 
 - Use only `package.json` to define dependencies between packages and use only `pnpm` and `turbo` to orchestrate tasks between packages.
 - Every package is configured as if it is going to be published to npm. This means it has to be built first before it can be used by the other apps and packages in the workspace. It should be built only when needed and only once. Build output should be cached by `turbo`. At the same time the consumer of the package should not care if the a local workspace package or a package downloaded from npm, it uses both in the same way.
-- An app or a package needs to have a way to watch for changes in all of it's dependencies and to rebuild/restart it's self when change occurs. This can be done using `vite build --watch`, `next dev` or `tsx watch` for example.
+- An app or a package needs to have a way to watch for changes in all of it's dependencies and to rebuild/restart it's self when change occurs. This can be done using `rslib build --watch`, `next dev` or `tsx watch` for example.
